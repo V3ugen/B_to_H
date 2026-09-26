@@ -4,10 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bar to Housing & IMPB</title>
+    
+    <!-- НАСТРОЙКИ ДЛЯ ПРЕВРАЩЕНИЯ В ПРИЛОЖЕНИЕ APPLE (PWA) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="IMPB Calc">
+    <link rel="apple-touch-icon" href="icon.png">
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 30px;
+            margin: 20px;
             background-color: #f4f4f9;
         }
         .container {
@@ -137,7 +145,6 @@
 <script>
     function sanitizeAndCalculate(inputElement, calculationFunction) {
         let value = inputElement.value;
-        
         value = value.replace(/,/g, '.'); 
         value = value.replace(/[^0-9.-]/g, ''); 
         
@@ -149,7 +156,6 @@
         if (inputElement.value !== value) {
             inputElement.value = value;
         }
-        
         calculationFunction();
     }
 
@@ -186,19 +192,14 @@
         const res3Div = document.getElementById('resComplex3');
         const res4Div = document.getElementById('resComplex4');
 
-        // Проверяем валидность строк (чтобы это были числа, а не одиночные точки или минусы)
         const isVal1Valid = val1 !== "" && val1 !== "-" && val1 !== ".";
         const isVal2Valid = val2 !== "" && val2 !== "-" && val2 !== ".";
 
-        // Расчет запускается, если заполнено ХОТЯ БЫ ОДНО из двух полей
         if (isVal1Valid || isVal2Valid) {
-            // Если поле пустое, берем 0
-            const a = isVal1Valid ? parseFloat(val1) : 0; // Футы
-            const b = isVal2Valid ? parseFloat(val2) : 0; // Дюймы
+            const a = isVal1Valid ? parseFloat(val1) : 0;
+            const b = isVal2Valid ? parseFloat(val2) : 0;
 
-            // Итоговая формула
             const r1 = ((a * 12) + b) * 25.4;
-            
             const r4 = r1 - 42;
             const r2 = r1 - 193;
             const r3 = r1 - 236;
@@ -208,12 +209,16 @@
             res2Div.textContent = "Insulators: " + Number(r2.toFixed(2));
             res3Div.textContent = "Housings: " + Number(r3.toFixed(2));
         } else {
-            // Если оба поля абсолютно пустые, очищаем экран результатов
             res1Div.textContent = "In millimeters: —";
             res4Div.textContent = "Conductors: —";
             res2Div.textContent = "Insulators: —";
             res3Div.textContent = "Housings: —";
         }
+    }
+
+    // РЕГИСТРАЦИЯ ПРИЛОЖЕНИЯ В ПАМЯТИ ТЕЛЕФОНА
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
     }
 </script>
 
