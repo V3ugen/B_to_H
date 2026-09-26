@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор с цифровой клавиатурой</title>
+    <title>Bar to Housing & IMPB</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -88,47 +88,46 @@
 <body>
 
 <div class="container">
-    <h2>Многофункциональный калькулятор</h2>
+    <h2>Bar to Housing & IMPB</h2>
     
     <div class="calculator-grid">
         
-        <!-- БЛОК 1: Базовые расчеты -->
+        <!-- БЛОК 1: Bar to Housing -->
         <div class="section-box">
-            <div class="section-title">Базовые расчеты</div>
+            <div class="section-title">Bar to Housing</div>
             
             <div class="input-group">
-                <label for="directInput">Прямой ввод (X):<small>Формула: (X * 25.4) - 261</small></label>
-                <!-- Добавлен атрибут inputmode="decimal" для мобильной цифровой клавиатуры -->
-                <input type="text" id="directInput" inputmode="decimal" placeholder="Введите X..." oninput="sanitizeAndCalculate(this, calculateDirect)">
-                <div class="result-box color-direct" id="directDisplay">Ожидание ввода...</div>
+                <label for="directInput">Housing to Bar<small> (Inches * 25.4) - 261</small></label>
+                <input type="text" id="directInput" inputmode="decimal" placeholder="Enter inches..." oninput="sanitizeAndCalculate(this, calculateDirect)">
+                <div class="result-box color-direct" id="directDisplay">Waiting for input...</div>
             </div>
 
             <div class="input-group" style="margin-top: 25px;">
-                <label for="reverseInput">Обратный ввод (Y):<small>Формула: (Y + 261) / 25.4</small></label>
-                <input type="text" id="reverseInput" inputmode="decimal" placeholder="Введите Y..." oninput="sanitizeAndCalculate(this, calculateReverse)">
-                <div class="result-box color-reverse" id="reverseDisplay">Ожидание ввода...</div>
+                <label for="reverseInput">Bar's to Housing:<small> (Millimeters + 261) / 25.4</small></label>
+                <input type="text" id="reverseInput" inputmode="decimal" placeholder="Enter millimeters..." oninput="sanitizeAndCalculate(this, calculateReverse)">
+                <div class="result-box color-reverse" id="reverseDisplay">Waiting for input...</div>
             </div>
         </div>
 
-        <!-- БЛОК 2: Комплексный расчет -->
+        <!-- БЛОК 2: IMPB -->
         <div class="section-box">
-            <div class="section-title">Комплексный расчет</div>
+            <div class="section-title">IMPB</div>
             
             <div class="input-group">
-                <label for="complexInput1">Первое число (Ввод A):</label>
-                <input type="text" id="complexInput1" inputmode="decimal" placeholder="Введите число A..." oninput="sanitizeAndCalculate(this, calculateComplex)">
+                <label for="complexInput1">Enter feet <span style="font-weight: normal; color: #6c757d;">(optional)</span>:</label>
+                <input type="text" id="complexInput1" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
             </div>
 
             <div class="input-group">
-                <label for="complexInput2">Второе число (Ввод B) <span style="font-weight: normal; color: #6c757d;">(необязательно)</span>:</label>
+                <label for="complexInput2">Enter inches <span style="font-weight: normal; color: #6c757d;">(optional)</span>:</label>
                 <input type="text" id="complexInput2" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
             </div>
 
             <div class="result-box color-complex">
-                <div class="result-item" id="resComplex1">Вывод 1: —</div>
-                <div class="result-item" id="resComplex4">Вывод 2 (Вывод 1 - 42): —</div>
-                <div class="result-item" id="resComplex2">Вывод 3 (Вывод 1 - 193): —</div>
-                <div class="result-item" id="resComplex3">Вывод 4 (Вывод 1 - 236): —</div>
+                <div class="result-item" id="resComplex1">In millimeters: —</div>
+                <div class="result-item" id="resComplex4">Conductors: —</div>
+                <div class="result-item" id="resComplex2">Insulators: —</div>
+                <div class="result-item" id="resComplex3">Housings: —</div>
             </div>
         </div>
 
@@ -138,6 +137,7 @@
 <script>
     function sanitizeAndCalculate(inputElement, calculationFunction) {
         let value = inputElement.value;
+        
         value = value.replace(/,/g, '.'); 
         value = value.replace(/[^0-9.-]/g, ''); 
         
@@ -149,6 +149,7 @@
         if (inputElement.value !== value) {
             inputElement.value = value;
         }
+        
         calculationFunction();
     }
 
@@ -158,9 +159,9 @@
         if (inputVal !== "" && inputVal !== "-" && inputVal !== ".") {
             const x = parseFloat(inputVal);
             const res = (x * 25.4) - 261;
-            display.textContent = "Вывод (Y): " + Number(res.toFixed(2));
+            display.textContent = "Result (Y): " + Number(res.toFixed(2));
         } else {
-            display.textContent = "Ожидание ввода...";
+            display.textContent = "Waiting for input...";
         }
     }
 
@@ -170,9 +171,9 @@
         if (inputVal !== "" && inputVal !== "-" && inputVal !== ".") {
             const y = parseFloat(inputVal);
             const res = (y + 261) / 25.4;
-            display.textContent = "Вывод (X): " + Number(res.toFixed(4));
+            display.textContent = "Result (X): " + Number(res.toFixed(4));
         } else {
-            display.textContent = "Ожидание ввода...";
+            display.textContent = "Waiting for input...";
         }
     }
 
@@ -185,25 +186,33 @@
         const res3Div = document.getElementById('resComplex3');
         const res4Div = document.getElementById('resComplex4');
 
-        if (val1 !== "" && val1 !== "-" && val1 !== ".") {
-            const a = parseFloat(val1);
-            const b = (val2 !== "" && val2 !== "-" && val2 !== ".") ? parseFloat(val2) : 0;
+        // Проверяем валидность строк (чтобы это были числа, а не одиночные точки или минусы)
+        const isVal1Valid = val1 !== "" && val1 !== "-" && val1 !== ".";
+        const isVal2Valid = val2 !== "" && val2 !== "-" && val2 !== ".";
 
+        // Расчет запускается, если заполнено ХОТЯ БЫ ОДНО из двух полей
+        if (isVal1Valid || isVal2Valid) {
+            // Если поле пустое, берем 0
+            const a = isVal1Valid ? parseFloat(val1) : 0; // Футы
+            const b = isVal2Valid ? parseFloat(val2) : 0; // Дюймы
+
+            // Итоговая формула
             const r1 = ((a * 12) + b) * 25.4;
             
             const r4 = r1 - 42;
             const r2 = r1 - 193;
             const r3 = r1 - 236;
 
-            res1Div.textContent = "Вывод 1: " + Number(r1.toFixed(2));
-            res4Div.textContent = "Вывод 2 (Вывод 1 - 42): " + Number(r4.toFixed(2));
-            res2Div.textContent = "Вывод 3 (Вывод 1 - 193): " + Number(r2.toFixed(2));
-            res3Div.textContent = "Вывод 4 (Вывод 1 - 236): " + Number(r3.toFixed(2));
+            res1Div.textContent = "In millimeters: " + Number(r1.toFixed(2));
+            res4Div.textContent = "Conductors: " + Number(r4.toFixed(2));
+            res2Div.textContent = "Insulators: " + Number(r2.toFixed(2));
+            res3Div.textContent = "Housings: " + Number(r3.toFixed(2));
         } else {
-            res1Div.textContent = "Вывод 1: —";
-            res4Div.textContent = "Вывод 2 (Вывод 1 - 42): —";
-            res2Div.textContent = "Вывод 3 (Вывод 1 - 193): —";
-            res3Div.textContent = "Вывод 4 (Вывод 1 - 236): —";
+            // Если оба поля абсолютно пустые, очищаем экран результатов
+            res1Div.textContent = "In millimeters: —";
+            res4Div.textContent = "Conductors: —";
+            res2Div.textContent = "Insulators: —";
+            res3Div.textContent = "Housings: —";
         }
     }
 </script>
