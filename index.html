@@ -4,223 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bar to Housing & IMPB</title>
-    
-    <!-- НАСТРОЙКИ ДЛЯ ПРЕВРАЩЕНИЯ В ПРИЛОЖЕНИЕ APPLE (PWA) -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="IMPB Calc">
     <link rel="apple-touch-icon" href="icon.png">
-
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-        }
-        .calculator-grid {
-            display: flex;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-        .section-box {
-            flex: 1;
-            min-width: 300px;
-            background: #fff;
-            border: 2px solid #e9ecef;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .section-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #eee;
-            color: #495057;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            font-size: 0.9em;
-            font-weight: bold;
-            color: #495057;
-            margin-bottom: 5px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 1em;
-        }
-        .result-box {
-            margin-top: 15px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-left: 4px solid #ced4da;
-            border-radius: 4px;
-        }
-        .result-item {
-            font-size: 1.05em;
-            font-weight: bold;
-            margin: 8px 0;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+        .nav-tabs { display: flex; background-color: #007bff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .tab-button { flex: 1; padding: 15px; text-align: center; background: none; border: none; color: rgba(255, 255, 255, 0.7); font-size: 1.1em; font-weight: bold; cursor: pointer; transition: all 0.2s ease; outline: none; }
+        .tab-button.active { color: white; border-bottom: 4px solid white; background-color: rgba(255, 255, 255, 0.1); }
+        .page-content { display: none; padding: 20px; max-width: 1000px; margin: 0 auto; }
+        .page-content.active { display: block; }
+        .container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 25px; }
+        .calculator-grid { display: flex; gap: 25px; flex-wrap: wrap; }
+        .section-box { flex: 1; min-width: 300px; background: #fff; border: 2px solid #e9ecef; padding: 20px; border-radius: 8px; }
+        .section-title { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #eee; color: #495057; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 0.9em; font-weight: bold; color: #495057; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ced4da; border-radius: 4px; font-size: 1em; }
+        .result-box { margin-top: 15px; padding: 10px; background: #f8f9fa; border-left: 4px solid #ced4da; border-radius: 4px; font-size: 1.05em; font-weight: bold; }
         .color-direct { color: #28a745; border-left-color: #28a745; }
         .color-reverse { color: #dc3545; border-left-color: #dc3545; }
         .color-complex { color: #007bff; border-left-color: #007bff; }
-        small {
-            color: #6c757d;
-            font-weight: normal;
-            display: block;
-            margin-top: 2px;
-        }
+        small { color: #6c757d; font-weight: normal; display: block; margin-top: 2px; }
+        .search-box { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #007bff; border-radius: 4px; font-size: 1em; box-sizing: border-box; }
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 4px; border: 1px solid #dee2e6; }
+        .info-table { width: 100%; border-collapse: collapse; background: white; min-width: 750px; }
+        .info-table th, .info-table td { border: 1px solid #dee2e6; padding: 10px; text-align: left; font-size: 0.9em; }
+        .info-table th { background-color: #007bff; color: white; font-weight: bold; position: sticky; top: 0; }
+        .info-table tr:nth-child(even) { background-color: #f8f9fa; }
+        .info-table tr:hover { background-color: #f1f3f5; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Bar to Housing & IMPB</h2>
-    
-    <div class="calculator-grid">
-        
-        <!-- БЛОК 1: Bar to Housing -->
-        <div class="section-box">
-            <div class="section-title">Bar to Housing</div>
-            
-            <div class="input-group">
-                <label for="directInput">Housing to Bar<small> (Inches * 25.4) - 261</small></label>
-                <input type="text" id="directInput" inputmode="decimal" placeholder="Enter inches..." oninput="sanitizeAndCalculate(this, calculateDirect)">
-                <div class="result-box color-direct" id="directDisplay">Waiting for input...</div>
-            </div>
+<nav class="nav-tabs">
+    <button class="tab-button active" onclick="switchPage('calculatorPage', this)">Calculator</button>
+    <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table</button>
+</nav>
 
-            <div class="input-group" style="margin-top: 25px;">
-                <label for="reverseInput">Bar's to Housing:<small> (Millimeters + 261) / 25.4</small></label>
-                <input type="text" id="reverseInput" inputmode="decimal" placeholder="Enter millimeters..." oninput="sanitizeAndCalculate(this, calculateReverse)">
-                <div class="result-box color-reverse" id="reverseDisplay">Waiting for input...</div>
+<div id="calculatorPage" class="page-content active">
+    <div class="container">
+        <h2>Bar to Housing & IMPB</h2>
+        <div class="calculator-grid">
+            <div class="section-box">
+                <div class="section-title">Bar to Housing</div>
+                <div class="input-group">
+                    <label for="directInput">Housing to Bar<small>(Inches * 25.4) - 261</small></label>
+                    <input type="text" id="directInput" inputmode="decimal" placeholder="Enter inches..." oninput="sanitizeAndCalculate(this, calculateDirect)">
+                    <div class="result-box color-direct" id="directDisplay">Waiting for input...</div>
+                </div>
+                <div class="input-group" style="margin-top: 25px;">
+                    <label for="reverseInput">Bar's to Housing:<small>(Millimeters + 261) / 25.4</small></label>
+                    <input type="text" id="reverseInput" inputmode="decimal" placeholder="Enter millimeters..." oninput="sanitizeAndCalculate(this, calculateReverse)">
+                    <div class="result-box color-reverse" id="reverseDisplay">Waiting for input...</div>
+                </div>
             </div>
-        </div>
-
-        <!-- БЛОК 2: IMPB -->
-        <div class="section-box">
-            <div class="section-title">IMPB</div>
-            
-            <div class="input-group">
-                <label for="complexInput1">Enter feet <span style="font-weight: normal; color: #6c757d;">(optional)</span>:</label>
-                <input type="text" id="complexInput1" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
-            </div>
-
-            <div class="input-group">
-                <label for="complexInput2">Enter inches <span style="font-weight: normal; color: #6c757d;">(optional)</span>:</label>
-                <input type="text" id="complexInput2" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
-            </div>
-
-            <div class="result-box color-complex">
-                <div class="result-item" id="resComplex1">In millimeters: —</div>
-                <div class="result-item" id="resComplex4">Conductors: —</div>
-                <div class="result-item" id="resComplex2">Insulators: —</div>
-                <div class="result-item" id="resComplex3">Housings: —</div>
+            <div class="section-box">
+                <div class="section-title">IMPB</div>
+                <div class="input-group">
+                    <label for="complexInput1">Enter feet <span style="font-weight:normal;color:#6c757d;">(optional)</span>:</label>
+                    <input type="text" id="complexInput1" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                </div>
+                <div class="input-group">
+                    <label for="complexInput2">Enter inches <span style="font-weight:normal;color:#6c757d;">(optional)</span>:</label>
+                    <input type="text" id="complexInput2" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                </div>
+                <div class="result-box color-complex">
+                    <div class="result-item" id="resComplex1">In millimeters: —</div>
+                    <div class="result-item" id="resComplex4">Conductors: —</div>
+                    <div class="result-item" id="resComplex2">Insulators: —</div>
+                    <div class="result-item" id="resComplex3">Housings: —</div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<script>
-    function sanitizeAndCalculate(inputElement, calculationFunction) {
-        let value = inputElement.value;
-        value = value.replace(/,/g, '.'); 
-        value = value.replace(/[^0-9.-]/g, ''); 
-        
-        const parts = value.split('.');
-        if (parts.length > 2) {
-            value = parts[0] + '.' + parts.slice(1).join('');
-        }
-        
-        if (inputElement.value !== value) {
-            inputElement.value = value;
-        }
-        calculationFunction();
-    }
+<div id="tablePage" class="page-content">
+    <div class="container">
+        <h2>Data Reference Table</h2>
+        <input type="text" id="tableSearch" class="search-box" placeholder="Search by model name..." oninput="filterTable()">
+        <div class="table-responsive">
+            <table class="info-table" id="dataTable">
+                <thead>
+                    <tr><th>Model Type</th><th>Value 1</th><th>Value 2</th><th>Value 3</th><th>Value 4</th><th>Value 5</th><th>Value 6</th></tr>
+                </thead>
+                <tbody id="tableBody"><!-- Заполнится из скрипта --></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-    function calculateDirect() {
-        const inputVal = document.getElementById('directInput').value;
-        const display = document.getElementById('directDisplay');
-        if (inputVal !== "" && inputVal !== "-" && inputVal !== ".") {
-            const x = parseFloat(inputVal);
-            const res = (x * 25.4) - 261;
-            display.textContent = "Result (Y): " + Number(res.toFixed(2));
-        } else {
-            display.textContent = "Waiting for input...";
-        }
-    }
-
-    function calculateReverse() {
-        const inputVal = document.getElementById('reverseInput').value;
-        const display = document.getElementById('reverseDisplay');
-        if (inputVal !== "" && inputVal !== "-" && inputVal !== ".") {
-            const y = parseFloat(inputVal);
-            const res = (y + 261) / 25.4;
-            display.textContent = "Result (X): " + Number(res.toFixed(4));
-        } else {
-            display.textContent = "Waiting for input...";
-        }
-    }
-
-    function calculateComplex() {
-        const val1 = document.getElementById('complexInput1').value;
-        const val2 = document.getElementById('complexInput2').value;
-        
-        const res1Div = document.getElementById('resComplex1');
-        const res2Div = document.getElementById('resComplex2');
-        const res3Div = document.getElementById('resComplex3');
-        const res4Div = document.getElementById('resComplex4');
-
-        const isVal1Valid = val1 !== "" && val1 !== "-" && val1 !== ".";
-        const isVal2Valid = val2 !== "" && val2 !== "-" && val2 !== ".";
-
-        if (isVal1Valid || isVal2Valid) {
-            const a = isVal1Valid ? parseFloat(val1) : 0;
-            const b = isVal2Valid ? parseFloat(val2) : 0;
-
-            const r1 = ((a * 12) + b) * 25.4;
-            const r4 = r1 - 42;
-            const r2 = r1 - 193;
-            const r3 = r1 - 236;
-
-            res1Div.textContent = "In millimeters: " + Number(r1.toFixed(2));
-            res4Div.textContent = "Conductors: " + Number(r4.toFixed(2));
-            res2Div.textContent = "Insulators: " + Number(r2.toFixed(2));
-            res3Div.textContent = "Housings: " + Number(r3.toFixed(2));
-        } else {
-            res1Div.textContent = "In millimeters: —";
-            res4Div.textContent = "Conductors: —";
-            res2Div.textContent = "Insulators: —";
-            res3Div.textContent = "Housings: —";
-        }
-    }
-
-    // РЕГИСТРАЦИЯ ПРИЛОЖЕНИЯ В ПАМЯТИ ТЕЛЕФОНА
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
-    }
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
