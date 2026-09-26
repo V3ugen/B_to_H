@@ -96,16 +96,25 @@ function calculateComplex() {
     }
 }
 
-function filterTable() {
-    const filter = document.getElementById("tableSearch").value.toUpperCase();
+// Очищает ввод в поиске от букв (оставляет только цифры, точки, дефис) и фильтрует таблицу
+function sanitizeSearchAndFilter(inputElement) {
+    let value = inputElement.value.replace(/,/g, '.').replace(/[^0-9.-]/g, '');
+    if (inputElement.value !== value) {
+        inputElement.value = value;
+    }
+    
+    const filter = value.toUpperCase();
     const rows = document.getElementById("dataTable").getElementsByTagName("tr");
+    
     for (let i = 1; i < rows.length; i++) {
-        const td = rows[i].getElementsByTagName("td")[0];
+        const td = rows[i].getElementsByTagName("td")[0]; // Ищем по первой колонке (название модели)
         if (td) {
-            rows[i].style.display = (td.textContent || td.innerText).toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            const textValue = td.textContent || td.innerText;
+            rows[i].style.display = textValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
         }
     }
 }
+
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
