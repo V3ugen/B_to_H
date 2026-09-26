@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор формул — Исправленный</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .calculator-grid {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .section-box {
+            flex: 1;
+            min-width: 300px;
+            background: #fff;
+            border: 2px solid #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eee;
+            color: #495057;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .result-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #ced4da;
+            border-radius: 4px;
+        }
+        .result-item {
+            font-size: 1.05em;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        .color-direct { color: #28a745; border-left-color: #28a745; }
+        .color-reverse { color: #dc3545; border-left-color: #dc3545; }
+        .color-complex { color: #007bff; border-left-color: #007bff; }
+        small {
+            color: #6c757d;
+            font-weight: normal;
+            display: block;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Многофункциональный калькулятор</h2>
+    
+    <div class="calculator-grid">
+        
+        <!-- БЛОК 1: Базовые расчеты -->
+        <div class="section-box">
+            <div class="section-title">Базовые расчеты</div>
+            
+            <div class="input-group">
+                <label for="directInput">Прямой ввод (X):<small>Формула: (X * 25.4) - 261</small></label>
+                <input type="text" id="directInput" placeholder="Введите X..." oninput="sanitizeAndCalculate(this, calculateDirect)">
+                <div class="result-box color-direct" id="directDisplay">Ожидание ввода...</div>
+            </div>
+
+            <div class="input-group" style="margin-top: 25px;">
+                <label for="reverseInput">Обратный ввод (Y):<small>Формула: (Y + 261) / 25.4</small></label>
+                <input type="text" id="reverseInput" placeholder="Введите Y..." oninput="sanitizeAndCalculate(this, calculateReverse)">
+                <div class="result-box color-reverse" id="reverseDisplay">Ожидание ввода...</div>
+            </div>
+        </div>
+
+        <!-- БЛОК 2: Комплексный расчет (Исправленные формулы) -->
+        <div class="section-box">
+            <div class="section-title">Комплексный расчет</div>
+            
+            <div class="input-group">
+                <label for="complexInput1">Первое число (Ввод A):</label>
+                <input type="text" id="complexInput1" placeholder="Введите число A..." oninput="sanitizeAndCalculate(this, calculateComplex)">
+            </div>
+
+            <div class="input-group">
+                <label for="complexInput2">Второе число (Ввод B) <span style="font-weight: normal; color: #6c757d;">(необязательно)</span>:</label>
+                <input type="text" id="complexInput2" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
+            </div>
+
+            <div class="result-box color-complex">
+                <div class="result-item" id="resComplex1">Вывод 1: —</div>
+                <div class="result-item" id="resComplex4">Вывод 2 (Вывод 1 - 42): —</div>
+                <div class="result-item" id="resComplex2">Вывод 3 (Вывод 1 - 193): —</div>
+                <div class="result-item" id="resComplex3">Вывод 4 (Вывод 1 - 236): —</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Универсальная очистка ввода от лишних символов
+    function sanitizeAndCalculate(inputElement, calculationFunction) {
+        let value = inputElement.value;
+        value = value.replace(/,/g, '.'); // Запятые в точки
+        value = value.replace(/[^0-9.-]/g, ''); // Удаляем буквы
+        
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        
+        if (inputElement.value !== value) {
+            inputElement.value = value;
+        }
+        calculationFunction();
+    }
+
+    // Базовый прямой
+    function calculateDirect() {
+        const inputVal = document.getElementById('directInput').value;
+        const display = document.getElementById('directDisplay');
+        if (inputVal !== "" && inputVal !== "-" && inputVal !== ".") {
+            const x = parseFloat(inputVal);
+            const res = (x * 25.4) - 261;
+            display.textContent = "Вывод (Y): " + Number(res.toFixed(2));
+        } else {
+            display.textContent = "Ожидание ввода...";
+        }
+    }
+
+    // Базовый обратный
+    function calculateReverse() {
+        const inputVal = document.getElementById('reverseInput').value;
+        const display = document.getElementById('reverseDisplay');
+        if (inputVal !== "" && inputVal !== "-" && inputVal !== ".") {
+            const y = parseFloat(inputVal);
+            const res = (y + 261) / 25.4;
+            display.textContent = "Вывод (X): " + Number(res.toFixed(4));
+        } else {
+            display.textContent = "Ожидание ввода...";
+        }
+    }
+
+    // ИСПРАВЛЕННЫЙ Комплексный расчет
+    function calculateComplex() {
+        const val1 = document.getElementById('complexInput1').value;
+        const val2 = document.getElementById('complexInput2').value;
+        
+        const res1Div = document.getElementById('resComplex1');
+        const res2Div = document.getElementById('resComplex2');
+        const res3Div = document.getElementById('resComplex3');
+        const res4Div = document.getElementById('resComplex4');
+
+        if (val1 !== "" && val1 !== "-" && val1 !== ".") {
+            const a = parseFloat(val1);
+            const b = (val2 !== "" && val2 !== "-" && val2 !== ".") ? parseFloat(val2) : 0;
+
+            // Новая точная формула: (A * 12 + B) * 25.4
+            const r1 = ((a * 12) + b) * 25.4;
+            
+            // Зависимые выводы
+            const r4 = r1 - 42;
+            const r2 = r1 - 193;
+            const r3 = r1 - 236;
+
+            // Обновление текста на странице
+            res1Div.textContent = "Вывод 1: " + Number(r1.toFixed(2));
+            res4Div.textContent = "Вывод 2 (Вывод 1 - 42): " + Number(r4.toFixed(2));
+            res2Div.textContent = "Вывод 3 (Вывод 1 - 193): " + Number(r2.toFixed(2));
+            res3Div.textContent = "Вывод 4 (Вывод 1 - 236): " + Number(r3.toFixed(2));
+        } else {
+            res1Div.textContent = "Вывод 1: —";
+            res4Div.textContent = "Вывод 2 (Вывод 1 - 42): —";
+            res2Div.textContent = "Вывод 3 (Вывод 1 - 193): —";
+            res3Div.textContent = "Вывод 4 (Вывод 1 - 236): —";
+        }
+    }
+</script>
+
+</body>
+</html>
