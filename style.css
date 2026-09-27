@@ -1,44 +1,113 @@
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
-.nav-tabs { display: flex; background-color: #007bff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-.tab-button { flex: 1; padding: 15px; text-align: center; background: none; border: none; color: rgba(255, 255, 255, 0.7); font-size: 1.1em; font-weight: bold; cursor: pointer; transition: all 0.2s ease; outline: none; }
-.tab-button.active { color: white; border-bottom: 4px solid white; background-color: rgba(255, 255, 255, 0.1); }
+body { 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: #f4f4f9; 
+    /* Защита от случайного масштабирования текста на iOS */
+    -webkit-text-size-adjust: 100%; 
+}
+
+/* ИСПРАВЛЕНО: Меню теперь скроллится горизонтально на iPhone, если кнопки не влезают, а не ломает строку */
+.nav-tabs { 
+    display: flex; 
+    background-color: #007bff; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+}
+.nav-tabs::-webkit-scrollbar {
+    display: none; /* Скрываем скроллбар в Safari и Chrome */
+}
+
+/* ИСПРАВЛЕНО: Кнопки не сжимаются меньше своего текста */
+.tab-button { 
+    flex: 1; 
+    min-width: max-content; 
+    padding: 15px 20px; 
+    text-align: center; 
+    background: none; 
+    border: none; 
+    color: rgba(255, 255, 255, 0.7); 
+    font-size: 1.05em; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    outline: none; 
+    -webkit-tap-highlight-color: transparent; /* Убираем серый квадрат при нажатии на iOS */
+}
+.tab-button.active { 
+    color: white; 
+    border-bottom: 4px solid white; 
+    background-color: rgba(255, 255, 255, 0.1); 
+}
 
 /* Скрытие и показ страниц */
 .page-content { display: none; padding: 20px; max-width: 1000px; margin: 0 auto; }
 .page-content.active { display: block; }
 
-.container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 25px; }
+/* ИСПРАВЛЕНО: Учет Safe Area (челки и нижней полосы) iPhone */
+.container { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    box-sizing: border-box;
+}
+@media (max-width: 480px) {
+    .page-content { padding: 10px; }
+    .container { padding: 15px; }
+}
 
-/* Обновленная адаптивная сетка */
+h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 25px; font-size: 1.5em; }
+
+/* Адаптивная сетка */
 .calculator-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
 .section-box { background: #fff; border: 2px solid #e9ecef; padding: 20px; border-radius: 8px; box-sizing: border-box; }
 .section-title { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #eee; color: #495057; }
 .input-group { margin-bottom: 15px; }
 label { display: block; font-size: 0.9em; font-weight: bold; color: #495057; margin-bottom: 5px; }
-input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ced4da; border-radius: 4px; font-size: 1em; }
 
-.result-box { margin-top: 15px; padding: 10px; background: #f8f9fa; border-left: 4px solid #ced4da; border-radius: 4px; font-size: 1.05em; font-weight: bold; }
+/* ИСПРАВЛЕНО: Инпуты на iOS иногда имеют внутренние тени и закругления по умолчанию */
+input { 
+    width: 100%; 
+    padding: 12px 10px; 
+    box-sizing: border-box; 
+    border: 1px solid #ced4da; 
+    border-radius: 4px; 
+    font-size: 16px; /* ИСПРАВЛЕНО: Минимум 16px, чтобы Safari на iPhone автоматоматически НЕ приближал экран при вводе */
+    -webkit-appearance: none; 
+}
+
+.result-box { margin-top: 15px; padding: 12px; background: #f8f9fa; border-left: 4px solid #ced4da; border-radius: 4px; font-size: 1.05em; font-weight: bold; word-wrap: break-word; }
 .color-direct { color: #28a745; border-left-color: #28a745; }
 .color-reverse { color: #dc3545; border-left-color: #dc3545; }
 .color-complex { color: #007bff; border-left-color: #007bff; }
+.color-bolt { color: #6f42c1; border-left-color: #6f42c1; }
 .result-item { margin-bottom: 8px; }
 .result-item:last-child { margin-bottom: 0; }
 small { color: #6c757d; font-weight: normal; display: block; margin-top: 2px; }
 
-/* Таблица */
-.table-responsive { width: 100%; overflow-x: auto; border-radius: 4px; border: 1px solid #dee2e6; }
-.info-table { width: 100%; border-collapse: collapse; background: white; min-width: 750px; }
-.info-table th, .info-table td { border: 1px solid #dee2e6; padding: 10px; text-align: left; font-size: 0.9em; }
+/* Таблица и контейнер */
+.table-responsive { 
+    width: 100%; 
+    overflow-x: auto; 
+    border-radius: 4px; 
+    border: 1px solid #dee2e6; 
+    -webkit-overflow-scrolling: touch; 
+}
+.info-table { width: 100%; border-collapse: collapse; background: white; min-width: 600px; }
+.info-table th, .info-table td { border: 1px solid #dee2e6; padding: 10px; text-align: left; font-size: 0.85em; }
 .info-table th { background-color: #007bff; color: white; font-weight: bold; position: sticky; top: 0; }
 .info-table tr:nth-child(even) { background-color: #f8f9fa; }
-.info-table tr:hover { background-color: #f1f3f5; }
 
 /* Поиск */
 .search-container { position: relative; width: 100%; margin-bottom: 15px; }
-.search-box { width: 100%; padding: 12px; padding-right: 40px; border: 1px solid #007bff; border-radius: 4px; font-size: 1em; box-sizing: border-box; }
-
-/* ИСПРАВЛЕНО: Кнопка очистки теперь всегда видима на своем месте */
-.search-clear-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.5em; color: #6c757d; cursor: pointer; display: block; padding: 0; line-height: 1; }
+.search-box { width: 100%; padding: 12px; padding-right: 40px; border: 1px solid #007bff; border-radius: 4px; font-size: 16px; box-sizing: border-box; -webkit-appearance: none; }
+.search-clear-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.5em; color: #6c757d; cursor: pointer; display: block; padding: 0; line-height: 1; -webkit-tap-highlight-color: transparent; }
 .search-clear-btn:hover { color: #dc3545; }
-.color-bolt { color: #6f42c1; border-left-color: #6f42c1; }
+
+#notesPage .section-box { flex: 1 1 100%; width: 100%; }
