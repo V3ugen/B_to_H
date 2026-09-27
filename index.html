@@ -19,7 +19,8 @@
     <button class="tab-button active" onclick="switchPage('barToHousingPage', this)">Bar to Housing</button>
     <button class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
     <button class="tab-button" onclick="switchPage('boltHolesPage', this)">Support Bolt Hole</button>
-    <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table</button>
+    <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table</button> <!-- Moved up -->
+    <button class="tab-button" onclick="switchPage('notesPage', this)">Notes</button> <!-- Moved down -->
 </nav>
 
 <!-- TAB 1: BAR TO HOUSING -->
@@ -59,12 +60,12 @@
                     <label for="complexInput2">Enter inches <span style="font-weight:normal;color:#6c757d;">(optional)</span>:</label>
                     <input type="text" id="complexInput2" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
                 </div>
-               <div class="result-box color-complex">
-    <div class="result-item" id="resComplex1">In millimeters: —</div>
-    <div class="result-item" id="resComplex3">Housings: —</div> <!-- Перенесено на первое место -->
-    <div class="result-item" id="resComplex2">Insulators: —</div> <!-- Второе место -->
-    <div class="result-item" id="resComplex4">Conductors: —</div> <!-- Последнее место -->
-</div>
+                <div class="result-box color-complex">
+                    <div class="result-item" id="resComplex1">In millimeters: —</div>
+                    <div class="result-item" id="resComplex3">Housings: —</div>
+                    <div class="result-item" id="resComplex2">Insulators: —</div>
+                    <div class="result-item" id="resComplex4">Conductors: —</div>
+                </div>
             </div>
         </div>
     </div>
@@ -108,6 +109,77 @@
     </div>
 </div>
 
+<!-- TAB 5: NOTES -->
+<div id="notesPage" class="page-content">
+    <div class="container">
+        <h2>Technical Notes</h2>
+        
+        <!-- SECTION: BITS -->
+        <div class="section-box" style="margin-bottom: 25px;">
+            <div class="section-title">Bits Reference</div>
+            <div class="result-box color-direct" style="background: #fff; font-weight: normal; border-left-color: #28a745;">
+                <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                    <li><strong>8mm Bit:</strong> 83 mm</li>
+                    <li><strong>10mm Bit (Emmegi CNC):</strong> 45 mm</li>
+                    <li><strong>10mm Bit (Bolero CNC):</strong> 54 mm</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECTION: PANEL FLANGES HOUSING INFO -->
+        <div class="section-box" style="margin-bottom: 25px;">
+            <div class="section-title">Housing Info Panel Flange (Qty per Set)</div>
+            <div class="table-responsive">
+                <table class="info-table" style="min-width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Flange Type</th>
+                            <th>Quantity to a Set</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>FT (125)</strong></td><td>9 to a set</td></tr>
+                        <tr><td><strong>FT (115)</strong></td><td>6 to a set</td></tr>
+                        <tr><td><strong>ET</strong></td><td>9 to a set</td></tr>
+                        <tr><td><strong>CMP</strong></td><td>6 to a set</td></tr>
+                        <tr><td><strong>AWS</strong></td><td>3 to a set</td></tr>
+                        <tr><td><strong>CPF</strong></td><td>2 to a set</td></tr>
+                        <tr><td><strong>PF</strong></td><td>3 to a set</td></tr>
+                        <tr><td><strong>EPF</strong></td><td>2 to a set</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION: PANEL FLANGES SIZES -->
+        <div class="section-box">
+            <div class="section-title">Panel Flanges Dimensions</div>
+            <div class="table-responsive">
+                <table class="info-table" style="min-width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Model / Flange Type</th>
+                            <th>Dimension (mm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>(125) AWS</strong></td><td>166.50 mm</td></tr>
+                        <tr><td><strong>(115) CPF</strong></td><td>166.50 mm</td></tr>
+                        <tr><td><strong>(125) ET</strong></td><td>149.00 mm</td></tr>
+                        <tr><td><strong>(125) FT</strong></td><td>132.00 mm</td></tr>
+                        <tr><td><strong>(145) EPF</strong></td><td>132.00 mm</td></tr>
+                        <tr><td><strong>(125) CMP</strong></td><td>196.00 mm</td></tr>
+                        <tr><td><strong>(115) PF</strong></td><td>166.50 mm</td></tr>
+                        <tr><td><strong>(145) PF</strong></td><td>165.32 mm</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>
+
