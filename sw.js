@@ -1,4 +1,4 @@
-const CACHE_NAME = 'impb-calc-v12'; // Updated cache version
+const CACHE_NAME = 'impb-calc-v15'; // Updated cache version
 const ASSETS = [
   'index.html',
   'style.css',

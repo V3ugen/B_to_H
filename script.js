@@ -62,25 +62,25 @@ function sanitizeAndCalculate(inputElement, calculationFunction) {
     calculationFunction();
 }
 
-// Tab 1: Direct Calculation
+// Tab 1: Direct Calculation (Bar distance in mm, rounded to 1 decimal place)
 function calculateDirect() {
     const val = document.getElementById('directInput').value;
     const display = document.getElementById('directDisplay');
     if (val !== "" && val !== "-" && val !== ".") {
-        display.textContent = "Bar is: " + ((parseFloat(val) * 25.4) - 261).toFixed(2);
+        display.textContent = "Bar is: " + ((parseFloat(val) * 25.4) - 261).toFixed(1) + " mm";
     } else { display.textContent = "Waiting for input..."; }
 }
 
-// Tab 1: Reverse Calculation
+// Tab 1: Reverse Calculation (Housing length in inches, rounded to 2 decimal places)
 function calculateReverse() {
     const val = document.getElementById('reverseInput').value;
     const display = document.getElementById('reverseDisplay');
     if (val !== "" && val !== "-" && val !== ".") {
-        display.textContent = "Housing is: " + ((parseFloat(val) + 261) / 25.4).toFixed(4);
+        display.textContent = "Housing is: " + ((parseFloat(val) + 261) / 25.4).toFixed(2) + " in";
     } else { display.textContent = "Waiting for input..."; }
 }
 
-// Tab 2: IMPB Calculation
+// Tab 2: IMPB Calculation (All millimeter values rounded to 1 decimal place)
 function calculateComplex() {
     const val1 = document.getElementById('complexInput1').value;
     const val2 = document.getElementById('complexInput2').value;
@@ -89,10 +89,10 @@ function calculateComplex() {
 
     if (isV1 || isV2) {
         const r1 = ((isV1 ? parseFloat(val1) : 0) * 12 + (isV2 ? parseFloat(val2) : 0)) * 25.4;
-        document.getElementById('resComplex1').textContent = "In millimeters: " + r1.toFixed(2);
-        document.getElementById('resComplex3').textContent = "Housings: " + (r1 - 236).toFixed(2);
-        document.getElementById('resComplex2').textContent = "Insulators: " + (r1 - 193).toFixed(2);
-        document.getElementById('resComplex4').textContent = "Conductors: " + (r1 - 42).toFixed(2);
+        document.getElementById('resComplex1').textContent = "In millimeters: " + r1.toFixed(1);
+        document.getElementById('resComplex3').textContent = "Housings: " + (r1 - 236).toFixed(1);
+        document.getElementById('resComplex2').textContent = "Insulators: " + (r1 - 193).toFixed(1);
+        document.getElementById('resComplex4').textContent = "Conductors: " + (r1 - 42).toFixed(1);
     } else {
         document.getElementById('resComplex1').textContent = "In millimeters: —";
         document.getElementById('resComplex3').textContent = "Housings: —";
@@ -101,7 +101,7 @@ function calculateComplex() {
     }
 }
 
-// Tab 3: Support Bolt Hole Calculation (Tape measure tape ticks)
+// Tab 3: Support Bolt Hole Calculation (Millimeter values rounded to 1 decimal place)
 function calculateSupportHoles() {
     const inputEl = document.getElementById('boltLengthInput');
     const display = document.getElementById('resBoltHoles');
@@ -119,10 +119,10 @@ function calculateSupportHoles() {
         else if (length >= 1200 && length < 2100) {
             const step = length / 2;
             display.innerHTML = `
-                <div class="result-item">Pitch: ${step.toFixed(2)} mm</div>
+                <div class="result-item">Pitch: ${step.toFixed(1)} mm</div>
                 <div class="result-item" style="color: #6f42c1; margin-top: 5px;">
                     Tape measure marks:<br>
-                    📍 1st hole: <strong>${step.toFixed(2)} mm</strong>
+                    📍 1st hole: <strong>${step.toFixed(1)} mm</strong>
                 </div>
             `;
         } 
@@ -130,11 +130,11 @@ function calculateSupportHoles() {
             const step = length / 3;
             const mark2 = step * 2;
             display.innerHTML = `
-                <div class="result-item">Pitch: ${step.toFixed(2)} mm</div>
+                <div class="result-item">Pitch: ${step.toFixed(1)} mm</div>
                 <div class="result-item" style="color: #6f42c1; margin-top: 5px;">
                     Tape measure marks:<br>
-                    📍 1st hole: <strong>${step.toFixed(2)} mm</strong><br>
-                    📍 2nd hole: <strong>${mark2.toFixed(2)} mm</strong>
+                    📍 1st hole: <strong>${step.toFixed(1)} mm</strong><br>
+                    📍 2nd hole: <strong>${mark2.toFixed(1)} mm</strong>
                 </div>
             `;
         } 
