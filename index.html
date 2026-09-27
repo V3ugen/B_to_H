@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,33 +10,45 @@
     <meta name="apple-mobile-web-app-title" content="IMPB Calc">
     <link rel="apple-touch-icon" href="icon.png">
     
-    <!-- ПОДКЛЮЧЕНИЕ СТИЛЕЙ ИЗ ОТДЕЛЬНОГО ФАЙЛА -->
+    <!-- LINK TO SEPARATE STYLESHEET -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <nav class="nav-tabs">
-    <button class="tab-button active" onclick="switchPage('calculatorPage', this)">Calculator</button>
+    <button class="tab-button active" onclick="switchPage('barToHousingPage', this)">Bar to Housing</button>
+    <button class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
+    <button class="tab-button" onclick="switchPage('boltHolesPage', this)">Support Bolt Hole</button>
     <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table</button>
 </nav>
 
-<div id="calculatorPage" class="page-content active">
+<!-- TAB 1: BAR TO HOUSING -->
+<div id="barToHousingPage" class="page-content active">
     <div class="container">
-        <h2>Bar to Housing & IMPB</h2>
-        <div class="calculator-grid">
+        <h2>Bar to Housing</h2>
+        <div class="calculator-grid" style="grid-template-columns: 1fr;">
             <div class="section-box">
                 <div class="section-title">Bar to Housing</div>
                 <div class="input-group">
-                    <label for="directInput">Housing to Bar<small>(Inches * 25.4) - 261</small></label>
+                    <label for="directInput">Housing to Bar <small>(Inches * 25.4) - 261</small></label>
                     <input type="text" id="directInput" inputmode="decimal" placeholder="Enter inches..." oninput="sanitizeAndCalculate(this, calculateDirect)">
                     <div class="result-box color-direct" id="directDisplay">Waiting for input...</div>
                 </div>
                 <div class="input-group" style="margin-top: 25px;">
-                    <label for="reverseInput">Bar's to Housing:<small>(Millimeters + 261) / 25.4</small></label>
+                    <label for="reverseInput">Bar to Housing <small>(Millimeters + 261) / 25.4</small></label>
                     <input type="text" id="reverseInput" inputmode="decimal" placeholder="Enter millimeters..." oninput="sanitizeAndCalculate(this, calculateReverse)">
                     <div class="result-box color-reverse" id="reverseDisplay">Waiting for input...</div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 2: IMPB -->
+<div id="impbPage" class="page-content">
+    <div class="container">
+        <h2>IMPB</h2>
+        <div class="calculator-grid" style="grid-template-columns: 1fr;">
             <div class="section-box">
                 <div class="section-title">IMPB</div>
                 <div class="input-group">
@@ -47,17 +59,37 @@
                     <label for="complexInput2">Enter inches <span style="font-weight:normal;color:#6c757d;">(optional)</span>:</label>
                     <input type="text" id="complexInput2" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
                 </div>
-                <div class="result-box color-complex">
-                    <div class="result-item" id="resComplex1">In millimeters: —</div>
-                    <div class="result-item" id="resComplex4">Conductors: —</div>
-                    <div class="result-item" id="resComplex2">Insulators: —</div>
-                    <div class="result-item" id="resComplex3">Housings: —</div>
+               <div class="result-box color-complex">
+    <div class="result-item" id="resComplex1">In millimeters: —</div>
+    <div class="result-item" id="resComplex3">Housings: —</div> <!-- Перенесено на первое место -->
+    <div class="result-item" id="resComplex2">Insulators: —</div> <!-- Второе место -->
+    <div class="result-item" id="resComplex4">Conductors: —</div> <!-- Последнее место -->
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 3: SUPPORT BOLT HOLE -->
+<div id="boltHolesPage" class="page-content">
+    <div class="container">
+        <h2>Support Bolt Hole Calculator</h2>
+        <div class="calculator-grid" style="grid-template-columns: 1fr;">
+            <div class="section-box">
+                <div class="section-title">Support Length Calculation</div>
+                <div class="input-group">
+                    <label for="boltLengthInput">Enter Length <small>in millimeters (mm)</small></label>
+                    <input type="text" id="boltLengthInput" inputmode="decimal" placeholder="Enter length..." oninput="sanitizeAndCalculate(this, calculateSupportHoles)">
+                </div>
+                <div class="result-box color-bolt">
+                    <div class="result-item" id="resBoltHoles">Result: Waiting for input...</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- TAB 4: REFERENCE TABLE -->
 <div id="tablePage" class="page-content">
     <div class="container">
         <h2>Data Reference Table</h2>
@@ -79,4 +111,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
