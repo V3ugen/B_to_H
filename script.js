@@ -23,7 +23,7 @@ const tableData = [
     ["DL34-115", "301.3", "", "", "", "", ""]
 ];
 
-// Automatically generate table on load
+// Автоматическая генерация справочной таблицы при загрузке
 document.addEventListener("DOMContentLoaded", () => {
     const tbody = document.getElementById("tableBody");
     if(!tbody) return;
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Tab switching (SPA)
+// Переключение вкладок приложения
 function switchPage(pageId, buttonElement) {
     document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
@@ -53,7 +53,7 @@ function switchPage(pageId, buttonElement) {
     if(buttonElement) buttonElement.classList.add('active');
 }
 
-// Input sanitization and dot fix
+// Санитаризация полей ввода
 function sanitizeAndCalculate(inputElement, calculationFunction) {
     let value = inputElement.value.replace(/,/g, '.').replace(/[^0-9.-]/g, '');
     const parts = value.split('.');
@@ -62,25 +62,26 @@ function sanitizeAndCalculate(inputElement, calculationFunction) {
     calculationFunction();
 }
 
-// Tab 1: Direct Calculation (Bar distance in mm, rounded to 1 decimal place)
+// Форма 1: HPB Housing
 function calculateDirect() {
     const val = document.getElementById('directInput').value;
     const display = document.getElementById('directDisplay');
     if (val !== "" && val !== "-" && val !== ".") {
-        display.textContent = "Bar is: " + ((parseFloat(val) * 25.4) - 261).toFixed(1) + " mm";
+        display.textContent = "Housing millimeters: " + ((parseFloat(val) * 25.4) - 261).toFixed(1);
     } else { display.textContent = "Waiting for input..."; }
 }
 
-// Tab 1: Reverse Calculation (Housing length in inches, rounded to 2 decimal places)
+// Форма 2: bars Millimeters to housing ((mm + 51) / 25.4)
 function calculateReverse() {
     const val = document.getElementById('reverseInput').value;
     const display = document.getElementById('reverseDisplay');
     if (val !== "" && val !== "-" && val !== ".") {
-        display.textContent = "Housing is: " + ((parseFloat(val) + 261) / 25.4).toFixed(2) + " in";
+        const result = (parseFloat(val) + 51) / 25.4;
+        display.textContent = "Housing is: " + result.toFixed(2) + " inches";
     } else { display.textContent = "Waiting for input..."; }
 }
 
-// Tab 2: IMPB Calculation (All millimeter values rounded to 1 decimal place)
+// IMPB Калькулятор
 function calculateComplex() {
     const val1 = document.getElementById('complexInput1').value;
     const val2 = document.getElementById('complexInput2').value;
@@ -101,18 +102,15 @@ function calculateComplex() {
     }
 }
 
-// Tab 3: Support Bolt Hole Calculation (Millimeter values rounded to 1 decimal place)
+// Support Bolt Hole Калькулятор
 function calculateSupportHoles() {
     const inputEl = document.getElementById('boltLengthInput');
     const display = document.getElementById('resBoltHoles');
-    
     if (!inputEl || !display) return;
-    
     const val = inputEl.value;
     
     if (val !== "" && val !== "-" && val !== ".") {
         const length = parseFloat(val);
-        
         if (length >= 1 && length < 1200) {
             display.innerHTML = "Result: No holes";
         } 
@@ -121,10 +119,8 @@ function calculateSupportHoles() {
             display.innerHTML = `
                 <div class="result-item">Pitch: ${step.toFixed(1)} mm</div>
                 <div class="result-item" style="color: #6f42c1; margin-top: 5px;">
-                    Tape measure marks:<br>
-                    📍 1st hole: <strong>${step.toFixed(1)} mm</strong>
-                </div>
-            `;
+                    Tape measure marks:<br>📍 1st hole: <strong>${step.toFixed(1)} mm</strong>
+                </div>`;
         } 
         else if (length >= 2100 && length <= 3396) {
             const step = length / 3;
@@ -135,13 +131,11 @@ function calculateSupportHoles() {
                     Tape measure marks:<br>
                     📍 1st hole: <strong>${step.toFixed(1)} mm</strong><br>
                     📍 2nd hole: <strong>${mark2.toFixed(1)} mm</strong>
-                </div>
-            `;
+                </div>`;
         } 
         else if (length > 3396) {
             display.innerHTML = "Result: Exceeds 3396 mm";
-        } 
-        else {
+        } else {
             display.innerHTML = "Result: Waiting for input...";
         }
     } else { 
@@ -149,16 +143,12 @@ function calculateSupportHoles() {
     }
 }
 
-// Table search filtering
+// Поиск и фильтрация таблицы
 function sanitizeSearchAndFilter(inputElement) {
     let value = inputElement.value.replace(/,/g, '.').replace(/[^0-9.-]/g, '');
-    if (inputElement.value !== value) {
-        inputElement.value = value;
-    }
-    
+    if (inputElement.value !== value) inputElement.value = value;
     const filter = value.toUpperCase();
     const rows = document.getElementById("dataTable").getElementsByTagName("tr");
-    
     for (let i = 1; i < rows.length; i++) {
         const td = rows[i].getElementsByTagName("td");
         if (td) {
@@ -168,7 +158,6 @@ function sanitizeSearchAndFilter(inputElement) {
     }
 }
 
-// Clear table search input
 function clearTableSearch() {
     const searchBox = document.getElementById("tableSearch");
     if (searchBox) {
@@ -177,7 +166,15 @@ function clearTableSearch() {
     }
 }
 
-// Service worker execution
+// Универсальная функция быстрой очистки полей кнопкой-крестиком
+function clearInputField(inputId, calculationFunction) {
+    const inputEl = document.getElementById(inputId);
+    if (inputEl) {
+        inputEl.value = "";
+        calculationFunction();
+    }
+}
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
 }

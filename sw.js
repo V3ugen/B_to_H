@@ -1,4 +1,4 @@
-const CACHE_NAME = 'impb-calc-v15'; // Updated cache version
+const CACHE_NAME = 'impb-calc-v28'; 
 const ASSETS = [
   'index.html',
   'style.css',
@@ -29,14 +29,6 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
-  );
-});
-
-
-// Работа в режиме офлайн
 self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => response || fetch(e.request))

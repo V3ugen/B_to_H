@@ -3,11 +3,9 @@ body {
     margin: 0; 
     padding: 0; 
     background-color: #f4f4f9; 
-    /* Защита от случайного масштабирования текста на iOS */
     -webkit-text-size-adjust: 100%; 
 }
 
-/* ИСПРАВЛЕНО: Меню теперь скроллится горизонтально на iPhone, если кнопки не влезают, а не ломает строку */
 .nav-tabs { 
     display: flex; 
     background-color: #007bff; 
@@ -16,14 +14,13 @@ body {
     top: 0; 
     z-index: 1000; 
     overflow-x: auto; 
-    -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
-    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+    -webkit-overflow-scrolling: touch; 
+    scrollbar-width: none; 
 }
 .nav-tabs::-webkit-scrollbar {
-    display: none; /* Скрываем скроллбар в Safari и Chrome */
+    display: none; 
 }
 
-/* ИСПРАВЛЕНО: Кнопки не сжимаются меньше своего текста */
 .tab-button { 
     flex: 1; 
     min-width: max-content; 
@@ -37,7 +34,7 @@ body {
     cursor: pointer; 
     transition: all 0.2s ease; 
     outline: none; 
-    -webkit-tap-highlight-color: transparent; /* Убираем серый квадрат при нажатии на iOS */
+    -webkit-tap-highlight-color: transparent; 
 }
 .tab-button.active { 
     color: white; 
@@ -45,11 +42,16 @@ body {
     background-color: rgba(255, 255, 255, 0.1); 
 }
 
-/* Скрытие и показ страниц */
-.page-content { display: none; padding: 20px; max-width: 1000px; margin: 0 auto; }
-.page-content.active { display: block; }
+.page-content { 
+    display: none; 
+    padding: 20px; 
+    max-width: 1000px; 
+    margin: 0 auto; 
+}
+.page-content.active { 
+    display: block; 
+}
 
-/* ИСПРАВЛЕНО: Учет Safe Area (челки и нижней полосы) iPhone */
 .container { 
     background: white; 
     padding: 20px; 
@@ -62,34 +64,113 @@ body {
     .container { padding: 15px; }
 }
 
-h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 25px; font-size: 1.5em; }
+h2 { 
+    text-align: center; 
+    color: #333; 
+    margin-top: 0; 
+    margin-bottom: 25px; 
+    font-size: 1.5em; 
+}
 
 /* Адаптивная сетка */
-.calculator-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
-.section-box { background: #fff; border: 2px solid #e9ecef; padding: 20px; border-radius: 8px; box-sizing: border-box; }
-.section-title { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #eee; color: #495057; }
-.input-group { margin-bottom: 15px; }
-label { display: block; font-size: 0.9em; font-weight: bold; color: #495057; margin-bottom: 5px; }
+.calculator-grid { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 25px; 
+}
+@media (min-width: 768px) {
+    /* Сетка изменена: колонка под таблицу стала заметно шире */
+    .calculator-grid { 
+        grid-template-columns: 1.2fr 1.8fr; 
+    }
+}
 
-/* ИСПРАВЛЕНО: Инпуты на iOS иногда имеют внутренние тени и закругления по умолчанию */
+.section-box { 
+    background: #fff; 
+    border: 2px solid #e9ecef; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-sizing: border-box; 
+}
+.section-title { 
+    font-size: 1.2em; 
+    font-weight: bold; 
+    margin-bottom: 15px; 
+    padding-bottom: 8px; 
+    border-bottom: 2px solid #eee; 
+    color: #495057; 
+}
+.input-group { 
+    margin-bottom: 15px; 
+}
+label { 
+    display: block; 
+    font-size: 0.9em; 
+    font-weight: bold; 
+    color: #495057; 
+    margin-bottom: 5px; 
+}
+
+/* Поля ввода и обертка с кнопкой очистки */
+.search-container { 
+    position: relative; 
+    width: 100%; 
+}
+
 input { 
     width: 100%; 
-    padding: 12px 10px; 
+    padding: 12px 40px 12px 10px; 
     box-sizing: border-box; 
     border: 1px solid #ced4da; 
     border-radius: 4px; 
-    font-size: 16px; /* ИСПРАВЛЕНО: Минимум 16px, чтобы Safari на iPhone автоматоматически НЕ приближал экран при вводе */
+    font-size: 16px; 
     -webkit-appearance: none; 
 }
 
-.result-box { margin-top: 15px; padding: 12px; background: #f8f9fa; border-left: 4px solid #ced4da; border-radius: 4px; font-size: 1.05em; font-weight: bold; word-wrap: break-word; }
+.search-box {
+    border-color: #007bff;
+}
+
+.search-clear-btn { 
+    position: absolute; 
+    right: 12px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    background: none; 
+    border: none; 
+    font-size: 1.5em; 
+    color: #6c757d; 
+    cursor: pointer; 
+    display: block; 
+    padding: 0; 
+    line-height: 1; 
+    -webkit-tap-highlight-color: transparent; 
+}
+.search-clear-btn:hover { 
+    color: #dc3545; 
+}
+
+.result-box { 
+    margin-top: 15px; 
+    padding: 12px; 
+    background: #f8f9fa; 
+    border-left: 4px solid #ced4da; 
+    border-radius: 4px; 
+    font-size: 1.05em; 
+    font-weight: bold; 
+    word-wrap: break-word; 
+}
 .color-direct { color: #28a745; border-left-color: #28a745; }
 .color-reverse { color: #dc3545; border-left-color: #dc3545; }
 .color-complex { color: #007bff; border-left-color: #007bff; }
 .color-bolt { color: #6f42c1; border-left-color: #6f42c1; }
-.result-item { margin-bottom: 8px; }
-.result-item:last-child { margin-bottom: 0; }
-small { color: #6c757d; font-weight: normal; display: block; margin-top: 2px; }
+
+.result-item { 
+    margin-bottom: 8px; 
+}
+.result-item:last-child { 
+    margin-bottom: 0; 
+}
 
 /* Таблица и контейнер */
 .table-responsive { 
@@ -99,15 +180,56 @@ small { color: #6c757d; font-weight: normal; display: block; margin-top: 2px; }
     border: 1px solid #dee2e6; 
     -webkit-overflow-scrolling: touch; 
 }
-.info-table { width: 100%; border-collapse: collapse; background: white; min-width: 600px; }
-.info-table th, .info-table td { border: 1px solid #dee2e6; padding: 10px; text-align: left; font-size: 0.85em; }
-.info-table th { background-color: #007bff; color: white; font-weight: bold; position: sticky; top: 0; }
-.info-table tr:nth-child(even) { background-color: #f8f9fa; }
+.info-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    background: white; 
+    min-width: 600px; 
+}
+.info-table th, .info-table td { 
+    border: 1px solid #dee2e6; 
+    padding: 10px; 
+    text-align: left; 
+    font-size: 0.85em; 
+}
+.info-table th { 
+    background-color: #007bff; 
+    color: white; 
+    font-weight: bold; 
+    position: sticky; 
+    top: 0; 
+}
+.info-table tr:nth-child(even) { 
+    background-color: #f8f9fa; 
+}
 
-/* Поиск */
-.search-container { position: relative; width: 100%; margin-bottom: 15px; }
-.search-box { width: 100%; padding: 12px; padding-right: 40px; border: 1px solid #007bff; border-radius: 4px; font-size: 16px; box-sizing: border-box; -webkit-appearance: none; }
-.search-clear-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.5em; color: #6c757d; cursor: pointer; display: block; padding: 0; line-height: 1; -webkit-tap-highlight-color: transparent; }
-.search-clear-btn:hover { color: #dc3545; }
+/* Блок для списка Bits Reference с зеленой линией слева */
+.bits-list-box {
+    margin-top: 15px;
+    padding: 12px 12px 12px 5px;
+    background: #f8f9fa; 
+    border-left: 4px solid #28a745; 
+    border-radius: 4px;
+}
 
-#notesPage .section-box { flex: 1 1 100%; width: 100%; }
+.bits-list-box ul {
+    margin: 0;
+    padding-left: 20px; 
+    list-style-type: disc; 
+    color: #28a745; 
+    font-size: 1.05em;
+    font-weight: 500;
+}
+
+.bits-list-box li {
+    margin-bottom: 8px;
+}
+
+.bits-list-box li:last-child {
+    margin-bottom: 0;
+}
+
+.bits-list-box li strong {
+    color: #1e7e34; 
+    font-weight: bold;
+}

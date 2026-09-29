@@ -2,181 +2,185 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bar to Housing & IMPB</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="IMPB Calc">
-    <link class="apple-touch-icon" href="icon.png">
-    
-    <!-- LINK TO SEPARATE STYLESHEET -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Working Notes</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-<nav class="nav-tabs">
-    <button class="tab-button active" onclick="switchPage('barToHousingPage', this)">Bar to Housing</button>
-    <button class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
-    <button class="tab-button" onclick="switchPage('boltHolesPage', this)">Support Bolt Hole</button>
-    <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table</button> <!-- Кнопка Notes удалена из меню -->
-</nav>
+    <!-- Горизонтальное меню навигации -->
+    <div class="nav-tabs">
+        <button class="tab-button active" onclick="switchPage('housingPage', this)">HPB Housing</button>
+        <button class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
+        <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table & Technical Notes</button>
+    </div>
 
-<!-- TAB 1: BAR TO HOUSING -->
-<div id="barToHousingPage" class="page-content active">
-    <div class="container">
-        <h2>Bar to Housing</h2>
-        <div class="calculator-grid" style="grid-template-columns: 1fr;">
-            <div class="section-box">
-                <div class="section-title">Bar to Housing</div>
+    <!-- ВКЛАДКА 1: Главная страница с калькуляторами -->
+    <div id="housingPage" class="page-content active">
+        <div class="container">
+            <div class="calculator-grid">
+                
+                <!-- Первая форма -->
+                <div class="section-box">
+                    <div class="section-title">HPB Housing</div>
+                    <div class="input-group">
+                        <label for="directInput">Enter Housing:</label>
+                        <div class="search-container">
+                            <input type="text" id="directInput" oninput="sanitizeAndCalculate(this, calculateDirect)" placeholder="Inches">
+                            <button class="search-clear-btn" onclick="clearInputField('directInput', calculateDirect)">&times;</button>
+                        </div>
+                    </div>
+                    <div id="directDisplay" class="result-box color-direct">Waiting for input...</div>
+                </div>
+
+                <!-- Вторая форма -->
+                <div class="section-box">
+                    <div class="section-title">bars Millimeters to housing</div>
+                    <div class="input-group">
+                        <label for="reverseInput">Enter Length:</label>
+                        <div class="search-container">
+                            <input type="text" id="reverseInput" oninput="sanitizeAndCalculate(this, calculateReverse)" placeholder="Millimeters">
+                            <button class="search-clear-btn" onclick="clearInputField('reverseInput', calculateReverse)">&times;</button>
+                        </div>
+                    </div>
+                    <div id="reverseDisplay" class="result-box color-reverse">Waiting for input...</div>
+                </div>
+
+            </div>
+
+            <!-- Третья форма (Опущена ниже сетки) -->
+            <div class="section-box" style="margin-top: 25px;">
+                <div class="section-title">Support Bolt Hole Calculator</div>
                 <div class="input-group">
-                    <label for="directInput">Housing to Bar <small>(Inches * 25.4) - 261</small></label>
-                    <input type="text" id="directInput" inputmode="decimal" placeholder="Enter inches..." oninput="sanitizeAndCalculate(this, calculateDirect)">
-                    <div class="result-box color-direct" id="directDisplay">Waiting for input...</div>
+                    <label for="boltLengthInput">Enter Length:</label>
+                    <div class="search-container">
+                        <input type="text" id="boltLengthInput" oninput="sanitizeAndCalculate(this, calculateSupportHoles)" placeholder="Millimeters">
+                        <button class="search-clear-btn" onclick="clearInputField('boltLengthInput', calculateSupportHoles)">&times;</button>
+                    </div>
                 </div>
-                <div class="input-group" style="margin-top: 25px;">
-                    <label for="reverseInput">Bar to Housing <small>(Millimeters + 261) / 25.4</small></label>
-                    <input type="text" id="reverseInput" inputmode="decimal" placeholder="Enter millimeters..." oninput="sanitizeAndCalculate(this, calculateReverse)">
-                    <div class="result-box color-reverse" id="reverseDisplay">Waiting for input...</div>
-                </div>
+                <div id="resBoltHoles" class="result-box color-bolt">Result: Waiting for input...</div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- TAB 2: IMPB -->
-<div id="impbPage" class="page-content">
-    <div class="container">
-        <h2>IMPB</h2>
-        <div class="calculator-grid" style="grid-template-columns: 1fr;">
+    <!-- ВКЛАДКА 2: IMPB -->
+    <div id="impbPage" class="page-content">
+        <div class="container">
+            <h2>IMPB Calculator</h2>
             <div class="section-box">
-                <div class="section-title">IMPB</div>
                 <div class="input-group">
-                    <label for="complexInput1">Enter feet <span style="font-weight:normal;color:#6c757d;">(optional)</span>:</label>
-                    <input type="text" id="complexInput1" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                    <label for="complexInput1">Enter feet (optional):</label>
+                    <div class="search-container">
+                        <input type="text" id="complexInput1" oninput="sanitizeAndCalculate(this, calculateComplex)" placeholder="Feet">
+                        <button class="search-clear-btn" onclick="clearInputField('complexInput1', calculateComplex)">&times;</button>
+                    </div>
                 </div>
                 <div class="input-group">
-                    <label for="complexInput2">Enter inches <span style="font-weight:normal;color:#6c757d;">(optional)</span>:</label>
-                    <input type="text" id="complexInput2" inputmode="decimal" placeholder="0" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                    <label for="complexInput2">Enter inches (optional):</label>
+                    <div class="search-container">
+                        <input type="text" id="complexInput2" oninput="sanitizeAndCalculate(this, calculateComplex)" placeholder="Inches">
+                        <button class="search-clear-btn" onclick="clearInputField('complexInput2', calculateComplex)">&times;</button>
+                    </div>
                 </div>
+                
                 <div class="result-box color-complex">
-                    <div class="result-item" id="resComplex1">In millimeters: —</div>
-                    <div class="result-item" id="resComplex3">Housings: —</div>
-                    <div class="result-item" id="resComplex2">Insulators: —</div>
-                    <div class="result-item" id="resComplex4">Conductors: —</div>
+                    <div id="resComplex1" class="result-item">In millimeters: —</div>
+                    <div id="resComplex3" class="result-item">Housings: —</div>
+                    <div id="resComplex2" class="result-item">Insulators: —</div>
+                    <div id="resComplex4" class="result-item">Conductors: —</div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- TAB 3: SUPPORT BOLT HOLE -->
-<div id="boltHolesPage" class="page-content">
-    <div class="container">
-        <h2>Support Bolt Hole Calculator</h2>
-        <div class="calculator-grid" style="grid-template-columns: 1fr;">
-            <div class="section-box">
-                <div class="section-title">Support Length Calculation</div>
-                <div class="input-group">
-                    <label for="boltLengthInput">Enter Length <small>in millimeters (mm)</small></label>
-                    <input type="text" id="boltLengthInput" inputmode="decimal" placeholder="Enter length..." oninput="sanitizeAndCalculate(this, calculateSupportHoles)">
-                </div>
-                <div class="result-box color-bolt">
-                    <div class="result-item" id="resBoltHoles">Result: Waiting for input...</div>
-                </div>
+    <!-- ВКЛАДКА 3: Reference Table + Technical Notes -->
+    <div id="tablePage" class="page-content">
+        <div class="container">
+            <h2>Data Reference Table</h2>
+            <div class="search-container">
+                <input type="text" id="tableSearch" class="search-box" oninput="sanitizeSearchAndFilter(this)" placeholder="Search by model type...">
+                <button class="search-clear-btn" onclick="clearTableSearch()">&times;</button>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- TAB 4: REFERENCE TABLE & TECHNICAL NOTES COMBINED -->
-<div id="tablePage" class="page-content">
-    <div class="container">
-        <h2>Data Reference Table</h2>
-        <div class="search-container">
-            <input type="text" id="tableSearch" class="search-box" inputmode="decimal" placeholder="Search by model number (digits only)..." oninput="sanitizeSearchAndFilter(this)">
-            <button id="searchClearBtn" class="search-clear-btn" onclick="clearTableSearch()">&times;</button>
-        </div>
-        <div class="table-responsive" style="margin-bottom: 35px;">
-            <table class="info-table" id="dataTable">
-                <thead>
-                    <tr><th>Model Type</th><th>Value 1</th><th>Value 2</th><th>Value 3</th><th>Value 4</th><th>Value 5</th><th>Value 6</th></tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
-
-        <!-- ТЕПЕРЬ ЗАМЕТКИ НАХОДЯТСЯ ЗДЕСЬ (ПОД ТАБЛИЦЕЙ) -->
-        <hr style="border: 0; border-top: 2px solid #e9ecef; margin-bottom: 30px;">
-        
-        <h2 style="margin-bottom: 25px;">Technical Notes</h2>
-        
-        <!-- SECTION: BITS -->
-        <div class="section-box" style="margin-bottom: 25px;">
-            <div class="section-title">Bits Reference</div>
-            <div class="result-box color-direct" style="background: #fff; font-weight: normal; border-left-color: #28a745;">
-                <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
-                    <li><strong>8mm Bit:</strong> 83 mm</li>
-                    <li><strong>10mm Bit (Emmegi CNC):</strong> 45 mm</li>
-                    <li><strong>10mm Bit (Bolero CNC):</strong> 54 mm</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- SECTION: PANEL FLANGES HOUSING INFO -->
-        <div class="section-box" style="margin-bottom: 25px;">
-            <div class="section-title">Housing Info Panel Flange (Qty per Set)</div>
             <div class="table-responsive">
-                <table class="info-table" style="min-width: 100%;">
+                <table id="dataTable" class="info-table">
                     <thead>
                         <tr>
-                            <th>Flange Type</th>
-                            <th>Quantity to a Set</th>
+                            <th>Model Type</th>
+                            <th>Value 1</th>
+                            <th>Value 2</th>
+                            <th>Value 3</th>
+                            <th>Value 4</th>
+                            <th>Value 5</th>
+                            <th>Value 6</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr><td><strong>FT (125)</strong></td><td>9 to a set</td></tr>
-                        <tr><td><strong>FT (115)</strong></td><td>6 to a set</td></tr>
-                        <tr><td><strong>ET</strong></td><td>9 to a set</td></tr>
-                        <tr><td><strong>CMP</strong></td><td>6 to a set</td></tr>
-                        <tr><td><strong>AWS</strong></td><td>3 to a set</td></tr>
-                        <tr><td><strong>CPF</strong></td><td>2 to a set</td></tr>
-                        <tr><td><strong>PF</strong></td><td>3 to a set</td></tr>
-                        <tr><td><strong>EPF</strong></td><td>2 to a set</td></tr>
+                    <tbody id="tableBody">
+                        <!-- Генерируется скриптом -->
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <!-- SECTION: PANEL FLANGES SIZES -->
-        <div class="section-box">
-            <div class="section-title">Panel Flanges Dimensions</div>
-            <div class="table-responsive">
-                <table class="info-table" style="min-width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>Model / Flange Type</th>
-                            <th>Dimension (mm)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><strong>(125) AWS</strong></td><td>166.50 mm</td></tr>
-                        <tr><td><strong>(115) CPF</strong></td><td>166.50 mm</td></tr>
-                        <tr><td><strong>(125) ET</strong></td><td>149.00 mm</td></tr>
-                        <tr><td><strong>(125) FT</strong></td><td>132.00 mm</td></tr>
-                        <tr><td><strong>(145) EPF</strong></td><td>132.00 mm</td></tr>
-                        <tr><td><strong>(125) CMP</strong></td><td>196.00 mm</td></tr>
-                        <tr><td><strong>(115) PF</strong></td><td>166.50 mm</td></tr>
-                        <tr><td><strong>(145) PF</strong></td><td>165.32 mm</td></tr>
-                    </tbody>
-                </table>
+            <!-- Блок технических заметок Technical Notes -->
+            <h2 style="margin-top: 40px;">Technical Notes</h2>
+            <div class="calculator-grid">
+                
+                <!-- Список Bits Reference с зеленой линией слева -->
+                <div class="section-box">
+                    <div class="section-title">Bits Reference</div>
+                    <div class="bits-list-box">
+                        <ul>
+                            <li><strong>8mm Bit:</strong> 83 mm</li>
+                            <li><strong>10mm Bit (Emmegi CNC):</strong> 45 mm</li>
+                            <li><strong>10mm Bit (Bolero CNC):</strong> 54 mm</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Таблица Housing Info Panel Flange (будет шире на ПК благодаря новой сетке) -->
+                <div class="section-box">
+                    <div class="section-title">Housing Info Panel Flange (Qty per Set)</div>
+                    <table class="info-table" style="min-width:100%">
+                        <thead>
+                            <tr><th>Flange Type</th><th>Quantity to a Set</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>FT (125)</strong></td><td>9 to a set</td></tr>
+                            <tr><td><strong>FT (115)</strong></td><td>6 to a set</td></tr>
+                            <tr><td><strong>ET</strong></td><td>9 to a set</td></tr>
+                            <tr><td><strong>CMP</strong></td><td>6 to a set</td></tr>
+                            <tr><td><strong>AWS</strong></td><td>3 to a set</td></tr>
+                            <tr><td><strong>CPF</strong></td><td>2 to a set</td></tr>
+                            <tr><td><strong>PF</strong></td><td>3 to a set</td></tr>
+                            <tr><td><strong>EPF</strong></td><td>2 to a set</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Нижняя таблица на всю ширину -->
+                <div class="section-box" style="grid-column: 1 / -1;">
+                    <div class="section-title">Panel Flanges Dimensions</div>
+                    <table class="info-table" style="min-width:100%">
+                        <thead>
+                            <tr><th>Model / Flange Type</th><th>Dimension (mm)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>(125) AWS</strong></td><td>166.50 mm</td></tr>
+                            <tr><td><strong>(115) CPF</strong></td><td>166.50 mm</td></tr>
+                            <tr><td><strong>(125) ET</strong></td><td>149.00 mm</td></tr>
+                            <tr><td><strong>(125) FT</strong></td><td>132.00 mm</td></tr>
+                            <tr><td><strong>(145) EPF</strong></td><td>132.00 mm</td></tr>
+                            <tr><td><strong>(125) CMP</strong></td><td>196.00 mm</td></tr>
+                            <tr><td><strong>(115) PF</strong></td><td>166.50 mm</td></tr>
+                            <tr><td><strong>(145) PF</strong></td><td>165.32 mm</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
         </div>
-
     </div>
-</div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
-
