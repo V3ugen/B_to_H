@@ -55,12 +55,25 @@ function switchPage(pageId, buttonElement) {
 
 // Санитаризация полей ввода
 function sanitizeAndCalculate(inputElement, calculationFunction) {
-    let value = inputElement.value.replace(/,/g, '.').replace(/[^0-9.-]/g, '');
+    // Разрешаем цифры и точку
+    let value = inputElement.value.replace(/,/g, '.').replace(/[^0-9.]/g, '');
     const parts = value.split('.');
-    if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
-    if (inputElement.value !== value) inputElement.value = value;
+    
+    let integerPart = parts[0].slice(0, 4); // Макс 4 цифры целой части
+    
+    if (parts.length > 1) {
+        let decimalPart = parts[1].slice(0, 2); // Макс 2 цифры после запятой
+        value = integerPart + '.' + decimalPart;
+    } else {
+        value = integerPart;
+    }
+    
+    if (inputElement.value !== value) {
+        inputElement.value = value;
+    }
     calculationFunction();
 }
+
 
 // Форма 1: HPB Housing
 function calculateDirect() {
