@@ -76,13 +76,61 @@ function sanitizeAndCalculate(inputElement, calculationFunction) {
 
 
 // Форма 1: HPB Housing
+let directTimer = null;
 function calculateDirect() {
     const val = document.getElementById('directInput').value;
     const display = document.getElementById('directDisplay');
+    clearTimeout(directTimer);
     if (val !== "" && val !== "-" && val !== ".") {
         display.textContent = "Housing millimeters: " + ((parseFloat(val) * 25.4) - 261).toFixed(1);
+        // сохраняем в историю, когда пользователь закончил вводить (пауза 1.5 сек)
+        directTimer = setTimeout(commitDirect, 1500);
     } else { display.textContent = "Waiting for input..."; }
 }
+
+// История HPB Housing: два последних размера (дюймы и миллиметры), хранится в памяти телефона
+const HIST_KEY = 'hpbHousingHistory';
+function loadHistory() {
+    try { const h = JSON.parse(localStorage.getItem(HIST_KEY)); return Array.isArray(h) ? h.slice(0, 2) : []; }
+    catch (e) { return []; }
+}
+function commitDirect() {
+    clearTimeout(directTimer);
+    const val = document.getElementById('directInput').value;
+    const num = parseFloat(val);
+    if (val === "" || val === "." || !isFinite(num)) return;
+    const mm = ((num * 25.4) - 261).toFixed(1);
+    let hist = loadHistory().filter(x => parseFloat(x.inch) !== num);
+    hist.unshift({ inch: String(num), mm: mm });
+    hist = hist.slice(0, 2);
+    try { localStorage.setItem(HIST_KEY, JSON.stringify(hist)); } catch (e) {}
+    renderHistory();
+}
+function renderHistory() {
+    const box = document.getElementById('directHistory');
+    if (!box) return;
+    const hist = loadHistory();
+    box.innerHTML = '';
+    if (!hist.length) { box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    const title = document.createElement('div');
+    title.className = 'history-title';
+    title.textContent = 'Last sizes (tap to reuse):';
+    box.appendChild(title);
+    hist.forEach(h => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'history-item';
+        b.textContent = h.inch + ' in  →  ' + h.mm + ' mm';
+        b.onclick = () => {
+            const inp = document.getElementById('directInput');
+            inp.value = h.inch;
+            calculateDirect();
+        };
+        box.appendChild(b);
+    });
+}
+document.addEventListener('DOMContentLoaded', renderHistory);
 
 // Форма 2: bars Millimeters to housing ((mm + 51) / 25.4)
 function calculateReverse() {

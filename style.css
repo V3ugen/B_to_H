@@ -233,3 +233,16 @@ input {
     color: #1e7e34; 
     font-weight: bold;
 }
+
+/* История HPB Housing */
+.history-box { margin-top: 12px; }
+.history-title { font-size: 0.85em; font-weight: bold; color: #6c757d; margin-bottom: 6px; }
+.history-item {
+    display: block; width: 100%; text-align: left;
+    margin-bottom: 6px; padding: 10px 12px;
+    background: #fff; border: 1px solid #28a745; border-radius: 6px;
+    color: #1e7e34; font-size: 1em; font-weight: bold;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.history-item:active { background: #e9f7ee; }
+.history-item:last-child { margin-bottom: 0; }
