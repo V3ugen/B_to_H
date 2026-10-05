@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#007bff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="icon.png">
     <title>Work Notes</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
@@ -11,9 +15,9 @@
 
     <!-- Три вкладки навигации -->
     <div class="nav-tabs">
-        <button class="tab-button active" onclick="switchPage('hpbPage', this)">HPB Housing</button>
-        <button class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
-        <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table & Technical Notes</button>
+        <button type="button" class="tab-button active" onclick="switchPage('hpbPage', this)">HPB Housing</button>
+        <button type="button" class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
+        <button type="button" class="tab-button" onclick="switchPage('tablePage', this)">Reference</button>
         <button type="button" class="tab-button" onclick="switchPage('tpConfigPage', this)">TP Config</button>
     </div>
 
@@ -27,8 +31,8 @@
                 <div class="input-group">
                     <label for="directInput">Enter Housing:</label>
                     <div class="search-container">
-                        <input type="text" id="directInput" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateDirect)">
-                        <button class="search-clear-btn" onclick="clearInputField('directInput', calculateDirect)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="directInput" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateDirect)">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('directInput', calculateDirect)">×</button>
                     </div>
                 </div>
                 <div id="directDisplay" class="result-box color-direct">Waiting for input...</div>
@@ -41,8 +45,8 @@
                 <div class="input-group">
                     <label for="reverseInput">Enter Length:</label>
                     <div class="search-container">
-                        <input type="text" id="reverseInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateReverse)">
-                        <button class="search-clear-btn" onclick="clearInputField('reverseInput', calculateReverse)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="reverseInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateReverse)">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('reverseInput', calculateReverse)">×</button>
                     </div>
                 </div>
                 <div id="reverseDisplay" class="result-box color-reverse">Waiting for input...</div>
@@ -55,8 +59,8 @@
                 <div class="input-group">
                     <label for="boltLengthInput">Enter Length:</label>
                     <div class="search-container">
-                        <input type="text" id="boltLengthInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateSupportHoles)">
-                        <button class="search-clear-btn" onclick="clearInputField('boltLengthInput', calculateSupportHoles)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="boltLengthInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateSupportHoles)">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('boltLengthInput', calculateSupportHoles)">×</button>
                     </div>
                 </div>
                 <div id="resBoltHoles" class="result-box color-bolt">Result: Waiting for input...</div>
@@ -73,15 +77,15 @@
                 <div class="input-group">
                     <label for="complexInput1">Enter feet (optional):</label>
                     <div class="search-container">
-                        <input type="text" id="complexInput1" placeholder="Feet" oninput="sanitizeAndCalculate(this, calculateComplex)">
-                        <button class="search-clear-btn" onclick="clearInputField('complexInput1', calculateComplex)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput1" placeholder="Feet" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('complexInput1', calculateComplex)">×</button>
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="complexInput2">Enter inches (optional):</label>
                     <div class="search-container">
-                        <input type="text" id="complexInput2" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateComplex)">
-                        <button class="search-clear-btn" onclick="clearInputField('complexInput2', calculateComplex)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput2" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('complexInput2', calculateComplex)">×</button>
                     </div>
                 </div>
                 <div class="result-box color-complex">
@@ -102,8 +106,8 @@
             
             <div class="input-group" style="margin-bottom: 20px;">
                 <div class="search-container">
-                    <input type="text" id="tableSearch" class="search-box" placeholder="Search model..." oninput="sanitizeSearchAndFilter(this)">
-                    <button class="search-clear-btn" onclick="clearTableSearch()">×</button>
+                    <input type="text" inputmode="decimal" autocomplete="off" id="tableSearch" class="search-box" placeholder="Search model..." oninput="sanitizeSearchAndFilter(this)">
+                    <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearTableSearch()">×</button>
                 </div>
             </div>
 
@@ -145,7 +149,7 @@
                 <div class="section-box">
                     <div class="section-title">Housing Info Panel Flange (Qty per Set)</div>
                     <div class="table-responsive">
-                        <table class="info-table">
+                        <table class="info-table info-table-small">
                             <thead>
                                 <tr>
                                     <th>Flange Type</th>
@@ -171,7 +175,7 @@
             <div class="section-box" style="margin-top: 25px;">
                 <div class="section-title">Panel Flanges Dimensions</div>
                 <div class="table-responsive">
-                    <table class="info-table">
+                    <table class="info-table info-table-small">
                         <thead>
                             <tr>
                                 <th>Model / Flange Type</th>
@@ -189,7 +193,6 @@
                             <tr><td><strong>(115) PF</strong></td><td>166.50 mm</td></tr>
                             <tr><td><strong>(145) PF</strong></td><td>165.32 mm</td></tr>
                         </tbody>
-                    </table>
                     </table>
                 </div>
             </div>

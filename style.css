@@ -315,47 +315,29 @@ input {
     margin-bottom: 6px;
     font-weight: 700;
 }
-/* Фикс адаптивности для Bits Reference и Housing Info Panel Flange на телефонах */
+/* ---------- Мобильная адаптация ---------- */
+body { padding-bottom: env(safe-area-inset-bottom, 0); }
+.nav-tabs { padding-top: env(safe-area-inset-top, 0); }
+.tab-button, .history-item, .search-clear-btn { touch-action: manipulation; }
+.search-clear-btn { width: 44px; height: 44px; right: 0; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid #007bff; outline-offset: 2px; }
+.info-table { min-width: 640px; }
+.info-table-small { min-width: 0; }
+#dataTable td { white-space: nowrap; }
+#dataTable td:first-child { position: sticky; left: 0; background: #fff; }
+#dataTable tr:nth-child(even) td:first-child { background: #f8f9fa; }
+.history-item { min-height: 44px; }
+
 @media (max-width: 767px) {
-    /* Перестраиваем сетку калькулятора в одну колонку на экранах смартфонов */
-    .calculator-grid {
-        grid-template-columns: 1fr !important;
-        gap: 15px !important;
-    }
-
-    /* Исправляем отступы карточек, чтобы они не зажимали контент */
-    .section-box {
-        padding: 15px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Делаем списки битов (Bits Reference) компактнее */
-    .bits-list-box {
-        padding: 10px 10px 10px 5px !important;
-    }
-    
-    .bits-list-box ul {
-        padding-left: 15px !important;
-        font-size: 0.95em !important;
-    }
-
-    /* Фикс для таблиц фланцев (Housing Info Panel Flange) */
-    /* Если фланцы сделаны таблицей .info-table, этот контейнер позволит скроллить их пальцем, не ломая экран */
-    .table-responsive {
-        width: 100% !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        margin-top: 10px;
-    }
-
-    /* Заставляем таблицы внутри блоков адаптироваться к ширине, если у них нет адаптивного контейнера */
-    .info-table {
-        min-width: 100% !important; /* Убирает жесткое ограничение в 600px, если экран меньше */
-        font-size: 0.8em !important; /* Немного уменьшаем шрифт для мобильных */
-    }
-
-    .info-table th, .info-table td {
-        padding: 8px 6px !important; /* Уменьшаем внутренние отступы ячеек */
-    }
+    .calculator-grid { grid-template-columns: 1fr; gap: 15px; }
+    .section-box { padding: 15px; }
+    .container { padding: 12px; }
+    h2 { font-size: 1.25em; margin-bottom: 15px; }
+    .tab-button { padding: 14px 16px; font-size: 0.95em; flex: 0 0 auto; }
+    .result-box { font-size: 1em; }
+    .bits-list-box ul { padding-left: 18px; font-size: 0.95em; }
+    .info-table th, .info-table td { padding: 8px 6px; font-size: 0.8em; }
+}
+@media (max-width: 480px) {
+    .page-content { padding: 8px; }
 }

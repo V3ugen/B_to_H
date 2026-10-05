@@ -55,8 +55,19 @@ function switchPage(pageId, buttonElement) {
     
     const targetPage = document.getElementById(pageId);
     if(targetPage) targetPage.classList.add('active');
-    if(buttonElement) buttonElement.classList.add('active');
+    if(buttonElement) {
+        buttonElement.classList.add('active');
+        buttonElement.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
+    try { localStorage.setItem('lastPage', pageId); } catch(e) {}
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    let last = null;
+    try { last = localStorage.getItem('lastPage'); } catch(e) {}
+    const btn = last && document.querySelector(`.tab-button[onclick*="'${last}'"]`);
+    if (btn) switchPage(last, btn);
+});
 
 // ФИКС ОШИБКИ: Теперь строки обрабатываются корректно без падения движка JS
 function sanitizeAndCalculate(inputElement, calculationFunction) {
@@ -92,7 +103,7 @@ function calculateDirect() {
     clearTimeout(directTimer);
     if (val !== "" && val !== "-" && val !== ".") {
         const res = ((parseFloat(val) * 25.4) - 261).toFixed(1);
-        display.textContent = "Housing millimeters: " + res;
+        display.textContent = parseFloat(res) <= 0 ? "Housing too small" : "Housing millimeters: " + res;
         directTimer = setTimeout(() => commitHistory(KEY_DIRECT, val, res, renderDirectHistory), 1500);
     } else { display.textContent = "Waiting for input..."; }
 }
