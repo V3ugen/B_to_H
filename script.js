@@ -298,7 +298,7 @@ function showTpConfiguration() {
         <div class="result-item"><span style="color: #495057;">Bars:</span> ${data.bars}</div>
         <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${data.lid}</strong></div>
         <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${data.base}</strong></div>
-        <div class="result-item"><span style="color: #495057;">SPACER SIZE:</span> <span style="color: #007bff;">${data.spacer}</span></div>
+        <div class="result-item"><span class="spacer-size"><span>SPACER SIZE:</span> <strong>${data.spacer}</strong></span></div>
         <div class="result-item" style="font-size: 0.85em; font-weight: normal; color: #6c757d; margin-top: 10px;">Note: ${data.notes}</div>
     `;
 }
