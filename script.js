@@ -276,7 +276,7 @@ const tpData = {
     "TPE/TPBE": { bars: "4 bars", lid: "49.55 MM (E)", base: "75.55 MM (TP)", spacer: "30 MM", notes: "E - HALF EARTH" },
     "TPHE/TPBHE": { bars: "5 bars", lid: "52.55 (HE)", base: "75.95 MM (TP)", spacer: "27 MM", notes: "HE - HALF EARTH" },
     "TPN": { bars: "4 bars", lid: "56.55 (TP)", base: "82.95 MM (N)", spacer: "30 MM", notes: "N - NEUTRAL" },
-    "TPNE": { bars: "5 bars", lid: "49.55 MM (E)", base: "82.95 MM (N)", spacer: "36 MM", notes: "SAME THING AS TPNE BE" },
+    "TPNE/TPNBE": { bars: "5 bars", lid: "49.55 MM (E)", base: "82.95 MM (N)", spacer: "36 MM", notes: "TPNBE - SAME THING AS TPNE" },
     "TPNHE/TPNBHE": { bars: "5 bars", lid: "52.55 MM (HE)", base: "82.95 MM (N)", spacer: "34 MM", notes: "HE - HALF EARTH, N - NEUTRAL" }
 };
 
