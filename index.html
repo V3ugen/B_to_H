@@ -2,131 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Working Notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPB Calc</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-    <!-- Горизонтальное меню навигации -->
+    <!-- Три вкладки навигации -->
     <div class="nav-tabs">
-        <button class="tab-button active" onclick="switchPage('housingPage', this)">HPB Housing</button>
+        <button class="tab-button active" onclick="switchPage('hpbPage', this)">HPB Housing</button>
         <button class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
         <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table & Technical Notes</button>
     </div>
 
-    <!-- ВКЛАДКА 1: Главная страница с калькуляторами -->
-    <div id="housingPage" class="page-content active">
-        <div class="container">
-            <div class="calculator-grid">
-                
-                <!-- Первая форма -->
-                <div class="section-box">
-                    <div class="section-title">HPB Housing</div>
-                    <div class="input-group">
-                        <label for="directInput">Enter Housing:</label>
-                        <div class="search-container">
-                            <input type="text" inputmode="decimal" autocomplete="off" id="directInput" oninput="sanitizeAndCalculate(this, calculateDirect)" onblur="commitDirect()" placeholder="Inches">
-                            <button class="search-clear-btn" onclick="clearInputField('directInput', calculateDirect)">&times;</button>
-                        </div>
+    <!-- Вкладка 1: HPB Housing -->
+    <div id="hpbPage" class="page-content active">
+        <div class="container calculator-grid">
+            
+            <!-- HPB Housing -->
+            <div class="section-box">
+                <div class="section-title">HPB Housing</div>
+                <div class="input-group">
+                    <label for="directInput">Enter Housing:</label>
+                    <div class="search-container">
+                        <input type="text" id="directInput" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateDirect)">
+                        <button class="search-clear-btn" onclick="clearInputField('directInput', calculateDirect)">×</button>
                     </div>
-                    <div id="directDisplay" class="result-box color-direct">Waiting for input...</div>
-                    <div id="directHistory" class="history-box" style="display:none"></div>
                 </div>
-
-                <!-- Вторая форма -->
-                <div class="section-box">
-                    <div class="section-title">Bars Millimeters to Housing</div>
-                    <div class="input-group">
-                        <label for="reverseInput">Enter Length:</label>
-                        <div class="search-container">
-                            <input type="text" inputmode="decimal" autocomplete="off" id="reverseInput" oninput="sanitizeAndCalculate(this, calculateReverse)" placeholder="Millimeters">
-                            <button class="search-clear-btn" onclick="clearInputField('reverseInput', calculateReverse)">&times;</button>
-                        </div>
-                    </div>
-                    <div id="reverseDisplay" class="result-box color-reverse">Waiting for input...</div>
-                </div>
-
+                <div id="directDisplay" class="result-box color-direct">Waiting for input...</div>
+                <div id="directHistory" class="history-box" style="display: none;"></div>
             </div>
 
-            <!-- Третья форма (Опущена ниже сетки) -->
-            <div class="section-box" style="margin-top: 25px;">
+            <!-- Bars Millimeters to Housing -->
+            <div class="section-box">
+                <div class="section-title">Bars Millimeters to Housing</div>
+                <div class="input-group">
+                    <label for="reverseInput">Enter Length:</label>
+                    <div class="search-container">
+                        <input type="text" id="reverseInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateReverse)">
+                        <button class="search-clear-btn" onclick="clearInputField('reverseInput', calculateReverse)">×</button>
+                    </div>
+                </div>
+                <div id="reverseDisplay" class="result-box color-reverse">Waiting for input...</div>
+                <div id="reverseHistory" class="history-box" style="display: none;"></div>
+            </div>
+
+            <!-- Support Bolt Hole Calculator -->
+            <div class="section-box" style="grid-column: 1 / -1;">
                 <div class="section-title">Support Bolt Hole Calculator</div>
                 <div class="input-group">
                     <label for="boltLengthInput">Enter Length:</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="boltLengthInput" oninput="sanitizeAndCalculate(this, calculateSupportHoles)" placeholder="Millimeters">
-                        <button class="search-clear-btn" onclick="clearInputField('boltLengthInput', calculateSupportHoles)">&times;</button>
+                        <input type="text" id="boltLengthInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateSupportHoles)">
+                        <button class="search-clear-btn" onclick="clearInputField('boltLengthInput', calculateSupportHoles)">×</button>
                     </div>
                 </div>
                 <div id="resBoltHoles" class="result-box color-bolt">Result: Waiting for input...</div>
             </div>
+
         </div>
     </div>
 
-    <!-- ВКЛАДКА 2: IMPB -->
+    <!-- Вкладка 2: IMPB -->
     <div id="impbPage" class="page-content">
-        <div class="container">
-            <h2>IMPB Calculator</h2>
+        <div class="container" style="max-width: 600px;">
             <div class="section-box">
+                <div class="section-title">IMPB Calculator</div>
                 <div class="input-group">
                     <label for="complexInput1">Enter feet (optional):</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput1" oninput="sanitizeAndCalculate(this, calculateComplex)" placeholder="Feet">
-                        <button class="search-clear-btn" onclick="clearInputField('complexInput1', calculateComplex)">&times;</button>
+                        <input type="text" id="complexInput1" placeholder="Feet" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                        <button class="search-clear-btn" onclick="clearInputField('complexInput1', calculateComplex)">×</button>
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="complexInput2">Enter inches (optional):</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput2" oninput="sanitizeAndCalculate(this, calculateComplex)" placeholder="Inches">
-                        <button class="search-clear-btn" onclick="clearInputField('complexInput2', calculateComplex)">&times;</button>
+                        <input type="text" id="complexInput2" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateComplex)">
+                        <button class="search-clear-btn" onclick="clearInputField('complexInput2', calculateComplex)">×</button>
                     </div>
                 </div>
-                
                 <div class="result-box color-complex">
                     <div id="resComplex1" class="result-item">In millimeters: —</div>
                     <div id="resComplex3" class="result-item">Housings: —</div>
                     <div id="resComplex2" class="result-item">Insulators: —</div>
                     <div id="resComplex4" class="result-item">Conductors: —</div>
                 </div>
+                <div id="complexHistory" class="history-box" style="display: none;"></div>
             </div>
         </div>
     </div>
 
-    <!-- ВКЛАДКА 3: Reference Table + Technical Notes -->
+    <!-- Вкладка 3: Reference Table & Technical Notes -->
     <div id="tablePage" class="page-content">
         <div class="container">
             <h2>Data Reference Table</h2>
-            <div class="search-container">
-                <input type="text" inputmode="decimal" autocomplete="off" id="tableSearch" class="search-box" oninput="sanitizeSearchAndFilter(this)" placeholder="Search by model type...">
-                <button class="search-clear-btn" onclick="clearTableSearch()">&times;</button>
+            
+            <div class="input-group" style="margin-bottom: 20px;">
+                <div class="search-container">
+                    <input type="text" id="tableSearch" class="search-box" placeholder="Search model..." oninput="sanitizeSearchAndFilter(this)">
+                    <button class="search-clear-btn" onclick="clearTableSearch()">×</button>
+                </div>
             </div>
+
             <div class="table-responsive">
                 <table id="dataTable" class="info-table">
                     <thead>
                         <tr>
                             <th>Model Type</th>
-                            <th>Value 1</th>
-                            <th>Value 2</th>
-                            <th>Value 3</th>
-                            <th>Value 4</th>
-                            <th>Value 5</th>
-                            <th>Value 6</th>
+                            <th>HA</th>
+                            <th>HB</th>
+                            <th>HC</th>
+                            <th>HD</th>
+                            <th>HE</th>
+                            <th>HF</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- Генерируется скриптом -->
+                        <!-- Генерируется автоматически из script.js -->
                     </tbody>
                 </table>
             </div>
 
-            <!-- Блок технических заметок Technical Notes -->
-            <h2 style="margin-top: 40px;">Technical Notes</h2>
-            <div class="calculator-grid">
-                
-                <!-- Список Bits Reference с зеленой линией слева -->
+            <h2 style="margin-top: 40px; margin-bottom: 20px;">Technical Notes</h2>
+            
+            <div class="calculator-grid" style="margin-bottom: 25px;">
+                <!-- Зеленые биты Bits Reference -->
                 <div class="section-box">
                     <div class="section-title">Bits Reference</div>
                     <div class="bits-list-box">
@@ -138,32 +140,42 @@
                     </div>
                 </div>
 
-                <!-- Таблица Housing Info Panel Flange (будет шире на ПК благодаря новой сетке) -->
+                <!-- Housing Info Panel Flange -->
                 <div class="section-box">
                     <div class="section-title">Housing Info Panel Flange (Qty per Set)</div>
-                    <table class="info-table" style="min-width:100%">
-                        <thead>
-                            <tr><th>Flange Type</th><th>Quantity to a Set</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><strong>FT (125)</strong></td><td>9 to a set</td></tr>
-                            <tr><td><strong>FT (115)</strong></td><td>6 to a set</td></tr>
-                            <tr><td><strong>ET</strong></td><td>9 to a set</td></tr>
-                            <tr><td><strong>CMP</strong></td><td>6 to a set</td></tr>
-                            <tr><td><strong>AWS</strong></td><td>3 to a set</td></tr>
-                            <tr><td><strong>CPF</strong></td><td>2 to a set</td></tr>
-                            <tr><td><strong>PF</strong></td><td>3 to a set</td></tr>
-                            <tr><td><strong>EPF</strong></td><td>2 to a set</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="info-table">
+                            <thead>
+                                <tr>
+                                    <th>Flange Type</th>
+                                    <th>Quantity to a Set</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>FT (125)</strong></td><td>9 to a set</td></tr>
+                                <tr><td><strong>FT (115)</strong></td><td>6 to a set</td></tr>
+                                <tr><td><strong>ET</strong></td><td>9 to a set</td></tr>
+                                <tr><td><strong>CMP</strong></td><td>6 to a set</td></tr>
+                                <tr><td><strong>AWS</strong></td><td>3 to a set</td></tr>
+                                <tr><td><strong>CPF</strong></td><td>2 to a set</td></tr>
+                                <tr><td><strong>PF</strong></td><td>3 to a set</td></tr>
+                                <tr><td><strong>EPF</strong></td><td>2 to a set</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Нижняя таблица на всю ширину -->
-                <div class="section-box" style="grid-column: 1 / -1;">
-                    <div class="section-title">Panel Flanges Dimensions</div>
-                    <table class="info-table" style="min-width:100%">
+            <!-- Panel Flanges Dimensions -->
+            <div class="section-box" style="margin-top: 25px;">
+                <div class="section-title">Panel Flanges Dimensions</div>
+                <div class="table-responsive">
+                    <table class="info-table">
                         <thead>
-                            <tr><th>Model / Flange Type</th><th>Dimension (mm)</th></tr>
+                            <tr>
+                                <th>Model / Flange Type</th>
+                                <th>Dimension (mm)</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr><td><strong>(125) AWS</strong></td><td>166.50 mm</td></tr>
@@ -177,9 +189,9 @@
                             <tr><td><strong>(145) PF</strong></td><td>165.32 mm</td></tr>
                         </tbody>
                     </table>
+                    </table>
                 </div>
             </div>
-
         </div>
     </div>
 
