@@ -236,3 +236,82 @@ input {
 }
 .history-item:active { background: #e9f7ee; }
 .history-item:last-child { margin-bottom: 0; }
+/* Контейнер для выпадающего списка с кастомной стрелочкой */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Красивое оформление поля выбора */
+.custom-select-wrapper select {
+    width: 100%;
+    padding: 12px 40px 12px 14px;
+    box-sizing: border-box;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    color: #495057;
+    cursor: pointer;
+    font-weight: 500;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    
+    /* Скрываем стандартную системную стрелочку */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Эффект при наведении и фокусе */
+.custom-select-wrapper select:hover {
+    border-color: #ced4da;
+    background-color: #fff;
+}
+
+.custom-select-wrapper select:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+}
+
+/* Создание новой аккуратной стрелочки справа */
+.custom-select-wrapper::after {
+    content: "";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #6c757d;
+    pointer-events: none; /* Чтобы клик проходил сквозь стрелочку */
+}
+
+/* Меняем цвет стрелочки при активном фокусе */
+.custom-select-wrapper:focus-within::after {
+    border-top-color: #007bff;
+}
+
+/* Дополнительные штрихи для аккуратного разделителя в блоке */
+.section-title {
+    font-size: 1.15em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f4f4f9;
+    color: #212529;
+    letter-spacing: 0.3px;
+}
+
+/* Лейбл над полем */
+.input-group label {
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    margin-bottom: 6px;
+    font-weight: 700;
+}

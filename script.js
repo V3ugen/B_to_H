@@ -259,3 +259,35 @@ function clearInputField(inputId, calculationFunction) {
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
 }
+// База данных конфигураций с фотографии 
+const tpData = {
+    "TP": { bars: "3 bars", lid: "56.55 MM (TP)", base: "75.95 (TP)", spacer: "23 MM", notes: "HE - HALF EARTH, BE - BARE HALF EARTH" },
+    "TPE/TPBE": { bars: "4 bars", lid: "49.55 MM (E)", base: "75.55 MM (TP)", spacer: "30 MM", notes: "E - HALF EARTH" },
+    "TPHE/TPBHE": { bars: "5 bars", lid: "52.55 (HE)", base: "75.95 MM (TP)", spacer: "27 MM", notes: "HE - HALF EARTH" },
+    "TPN": { bars: "4 bars", lid: "56.55 (TP)", base: "82.95 MM (N)", spacer: "30 MM", notes: "N - NEUTRAL" },
+    "TPNE": { bars: "5 bars", lid: "49.55 MM (E)", base: "82.95 MM (N)", spacer: "36 MM", notes: "SAME THING AS TPNE BE" },
+    "TPNHE/TPNBHE": { bars: "5 bars", lid: "52.55 MM (HE)", base: "82.95 MM (N)", spacer: "34 MM", notes: "HE - HALF EARTH, N - NEUTRAL" }
+};
+
+// Функция отображения выбранной конфигурации
+function showTpConfiguration() {
+    const selectEl = document.getElementById('tpConfigSelect');
+    const display = document.getElementById('tpResultBox');
+    if (!selectEl || !display) return;
+
+    const selectedType = selectEl.value;
+
+    if (!selectedType) {
+        display.innerHTML = "Result: Waiting for selection...";
+        return;
+    }
+
+    const data = tpData[selectedType];
+    display.innerHTML = `
+        <div class="result-item"><span style="color: #495057;">Bars:</span> ${data.bars}</div>
+        <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${data.lid}</strong></div>
+        <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${data.base}</strong></div>
+        <div class="result-item"><span style="color: #495057;">SPACER SIZE:</span> <span style="color: #007bff;">${data.spacer}</span></div>
+        <div class="result-item" style="font-size: 0.85em; font-weight: normal; color: #6c757d; margin-top: 10px;">Note: ${data.notes}</div>
+    `;
+}

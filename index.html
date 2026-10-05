@@ -14,6 +14,7 @@
         <button class="tab-button active" onclick="switchPage('hpbPage', this)">HPB Housing</button>
         <button class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
         <button class="tab-button" onclick="switchPage('tablePage', this)">Reference Table & Technical Notes</button>
+        <button type="button" class="tab-button" onclick="switchPage('tpConfigPage', this)">TP Config</button>
     </div>
 
     <!-- Вкладка 1: HPB Housing -->
@@ -194,6 +195,37 @@
             </div>
         </div>
     </div>
+<div id="tpConfigPage" class="page-content">
+    <div class="container">
+        <h2>TP Configuration Selector</h2>
+        <div class="calculator-grid">
+            <div class="section-box">
+                <div class="section-title">Select Configuration</div>
+    <div class="input-group">
+    <label for="tpConfigSelect">Configuration Type</label>
+    <div class="custom-select-wrapper">
+        <select id="tpConfigSelect" onchange="showTpConfiguration()">
+            <option value="">-- Select Type --</option>
+            <option value="TP">TP (3 bars)</option>
+            <option value="TPE/TPBE">TPE / TPBE (4 bars)</option>
+            <option value="TPHE/TPBHE">TPHE / TPBHE (5 bars)</option>
+            <option value="TPN">TPN (4 bars)</option>
+            <option value="TPNE">TPNE (5 bars)</option>
+            <option value="TPNHE/TPNBHE">TPNHE / TPNBHE (5 bars)</option>
+        </select>
+    </div>
+</div>
+
+            </div>
+            <div class="section-box">
+                <div class="section-title">Specifications</div>
+                <div id="tpResultBox" class="result-box color-complex">
+                    Result: Waiting for selection...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script src="script.js"></script>
 </body>
