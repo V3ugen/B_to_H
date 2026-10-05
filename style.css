@@ -315,3 +315,47 @@ input {
     margin-bottom: 6px;
     font-weight: 700;
 }
+/* Фикс адаптивности для Bits Reference и Housing Info Panel Flange на телефонах */
+@media (max-width: 767px) {
+    /* Перестраиваем сетку калькулятора в одну колонку на экранах смартфонов */
+    .calculator-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    /* Исправляем отступы карточек, чтобы они не зажимали контент */
+    .section-box {
+        padding: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Делаем списки битов (Bits Reference) компактнее */
+    .bits-list-box {
+        padding: 10px 10px 10px 5px !important;
+    }
+    
+    .bits-list-box ul {
+        padding-left: 15px !important;
+        font-size: 0.95em !important;
+    }
+
+    /* Фикс для таблиц фланцев (Housing Info Panel Flange) */
+    /* Если фланцы сделаны таблицей .info-table, этот контейнер позволит скроллить их пальцем, не ломая экран */
+    .table-responsive {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin-top: 10px;
+    }
+
+    /* Заставляем таблицы внутри блоков адаптироваться к ширине, если у них нет адаптивного контейнера */
+    .info-table {
+        min-width: 100% !important; /* Убирает жесткое ограничение в 600px, если экран меньше */
+        font-size: 0.8em !important; /* Немного уменьшаем шрифт для мобильных */
+    }
+
+    .info-table th, .info-table td {
+        padding: 8px 6px !important; /* Уменьшаем внутренние отступы ячеек */
+    }
+}
