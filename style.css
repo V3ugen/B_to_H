@@ -428,3 +428,6 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 
 .lbl-info-extra:not(:empty) { margin-top: 12px; padding-top: 12px; border-top: 2px solid #e9ecef; }
 .lbl-extra-title { font-size: 0.85em; font-weight: bold; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+
+/* Won / SO - побольше расстояние между кнопками */
+.lbl-middle { gap: 20px; }

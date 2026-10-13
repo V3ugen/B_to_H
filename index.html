@@ -16,10 +16,10 @@
     <!-- Три вкладки навигации -->
     <div class="nav-tabs">
         <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">Label</button>
+        <button type="button" class="tab-button" onclick="switchPage('tpConfigPage', this)">TP Config</button>
         <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB Housing</button>
         <button type="button" class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
         <button type="button" class="tab-button" onclick="switchPage('tablePage', this)">Reference</button>
-        <button type="button" class="tab-button" onclick="switchPage('tpConfigPage', this)">TP Config</button>
     </div>
 
     <!-- Вкладка 1: HPB Label (интерактивная этикетка) -->
@@ -54,7 +54,7 @@
                         <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'A', 'Material Type:\nA = Aluminum\nBlank = Copper')">A</button><span class="lbl-sep">-</span>
                         <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'UL', 'Joggle Type:\nUL or UL13')">UL</button><span class="lbl-sep">-</span>
                         <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'FL', 'Type:\nFL = Flat Layer\nDL = Double Layer')">FL</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '143.02', 'System Length in Inches')">143.02</button><span class="lbl-sep">-</span>
-                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'T', 'Stack Configuration:\n\nT = Triple Stack,\nBlank = Single Stack,\n D = Double Stack')">T</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '125', 'Width in mm')">125</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'T', 'Stack Configuration:\n\nBlank = Single Stack,\nD = Double Stack,\nT = Triple Stack ')">T</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '125', 'Width in mm')">125</button><span class="lbl-sep">-</span>
                         <button type="button" class="lbl-chip lbl-code" onclick="goToTpConfig('TPN')">TPN</button>
                     </div>
 
