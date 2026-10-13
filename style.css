@@ -353,3 +353,78 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
     font-size: 1.1em;
     font-weight: bold;
 }
+
+
+/* ---------- HPB Label (интерактивная этикетка) ---------- */
+.lbl-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+.lbl-legend-item {
+    font-size: 0.8em; font-weight: bold; padding: 4px 10px;
+    border: 2px solid; border-radius: 6px;
+}
+
+.lbl-sheet {
+    background: #f8f9fa;
+    border: 2px dashed #ced4da;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+}
+.lbl-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; }
+.lbl-top { font-size: 1.25em; }
+.lbl-middle { font-size: 1.1em; justify-content: space-between; }
+.lbl-center { font-size: 1.4em; }
+.lbl-codeline { font-size: 1.5em; gap: 2px; row-gap: 10px; }
+.lbl-sep { font-weight: bold; color: #495057; padding: 0 2px; }
+.lbl-bottom { font-size: 0.85em; color: #6c757d; text-align: left; margin-top: 6px; }
+
+.lbl-chip {
+    font-family: inherit; font-size: inherit; font-weight: bold;
+    padding: 6px 12px; min-height: 44px;
+    border: 2px solid; border-radius: 6px;
+    cursor: pointer; transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+
+/* Data - синий */
+.lbl-data { background: #e7f1ff; border-color: #9ec5fe; color: #0a58ca; }
+.lbl-chip.lbl-data.active { background: #007bff; border-color: #0056b3; color: #fff; }
+/* Code - зелёный */
+.lbl-code { background: #e9f7ee; border-color: #a3d9b1; color: #1e7e34; }
+.lbl-chip.lbl-code.active { background: #28a745; border-color: #1e7e34; color: #fff; }
+/* Number - оранжевый */
+.lbl-num { background: #fff3e0; border-color: #ffcc80; color: #c2570c; }
+.lbl-chip.lbl-num.active { background: #fd7e14; border-color: #c2570c; color: #fff; }
+
+@media (hover: hover) {
+    .lbl-chip:hover { transform: scale(1.05); }
+}
+
+/* Панель пояснения - в стиле result-box остального приложения */
+.lbl-info {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+}
+.lbl-info-title {
+    font-weight: bold; color: #007bff;
+    text-transform: uppercase; letter-spacing: 0.3px;
+    margin-bottom: 6px; word-wrap: break-word;
+}
+.lbl-info-text { color: #333; font-size: 1.05em; white-space: pre-line; word-wrap: break-word; }
+
+@media (max-width: 480px) {
+    .lbl-sheet { padding: 12px; }
+    .lbl-top { font-size: 1.1em; }
+    .lbl-middle { font-size: 1em; justify-content: center; }
+    .lbl-center { font-size: 1.2em; }
+    .lbl-codeline { font-size: 1.1em; }
+    .lbl-chip { padding: 6px 8px; }
+}
+
+.lbl-info-extra:not(:empty) { margin-top: 12px; padding-top: 12px; border-top: 2px solid #e9ecef; }
+.lbl-extra-title { font-size: 0.85em; font-weight: bold; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }

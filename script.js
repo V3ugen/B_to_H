@@ -303,3 +303,39 @@ function showTpConfiguration() {
         <div class="result-item" style="font-size: 0.85em; font-weight: normal; color: #6c757d; margin-top: 10px;">Note: ${data.notes}</div>
     `;
 }
+
+
+// HPB Label: показать пояснение к выбранной части этикетки.
+// Если передан tpKey, спецификация подтягивается из tpData (вкладка TP Config).
+function showLabelInfo(el, title, message, tpKey) {
+    document.querySelectorAll('#labelPage .lbl-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+
+    document.getElementById('lblInfoTitle').textContent = title;
+    document.getElementById('lblInfoText').textContent = message;
+
+    const extra = document.getElementById('lblInfoExtra');
+    extra.innerHTML = '';
+    const d = tpKey && typeof tpData !== 'undefined' ? tpData[tpKey] : null;
+    if (d) {
+        extra.innerHTML = `
+            <div class="lbl-extra-title">TP Config: ${tpKey}</div>
+            <div class="result-item"><span style="color: #495057;">Bars:</span> <strong>${d.bars}</strong></div>
+            <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${d.lid}</strong></div>
+            <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${d.base}</strong></div>
+            <div class="result-item"><span class="spacer-size"><span>SPACER SIZE:</span> <strong>${d.spacer}</strong></span></div>
+            <div class="result-item" style="font-size: 0.85em; color: #6c757d;">Note: ${d.notes}</div>
+        `;
+    }
+    document.getElementById('lblInfo').style.display = 'block';
+}
+
+
+// Label -> TP Config: переключить вкладку и выбрать конфигурацию
+function goToTpConfig(key) {
+    const tabBtn = document.querySelector(".tab-button[onclick*=\"'tpConfigPage'\"]");
+    switchPage('tpConfigPage', tabBtn);
+    const sel = document.getElementById('tpConfigSelect');
+    if (sel) { sel.value = key; showTpConfiguration(); }
+    window.scrollTo(0, 0);
+}

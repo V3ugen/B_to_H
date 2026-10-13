@@ -15,14 +15,63 @@
 
     <!-- Три вкладки навигации -->
     <div class="nav-tabs">
-        <button type="button" class="tab-button active" onclick="switchPage('hpbPage', this)">HPB Housing</button>
+        <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">Label</button>
+        <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB Housing</button>
         <button type="button" class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
         <button type="button" class="tab-button" onclick="switchPage('tablePage', this)">Reference</button>
         <button type="button" class="tab-button" onclick="switchPage('tpConfigPage', this)">TP Config</button>
     </div>
 
+    <!-- Вкладка 1: HPB Label (интерактивная этикетка) -->
+    <div id="labelPage" class="page-content active">
+        <div class="container">
+            <h2>HPB Label</h2>
+            <div class="section-box">
+                <div class="section-title">Interactive Label (tap any part)</div>
+
+                <div class="lbl-legend">
+                    <span class="lbl-legend-item lbl-data">Data</span>
+                    <span class="lbl-legend-item lbl-code">Code</span>
+                    <span class="lbl-legend-item lbl-num">Number</span>
+                </div>
+
+                <div class="lbl-sheet">
+                    <div class="lbl-row lbl-top">
+                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, '61512BU', '61512BU = Project ID in OMNI')">61512BU</button>
+                    </div>
+
+                    <div class="lbl-row lbl-middle">
+                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, 'WON: 24344820', 'WON = Job ID in OMNI\nValue: 24344820')">Won: 24344820</button>
+                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, 'SO: 2645902', 'SO = ShopOrderNo in OMNI\nValue: 2645902')">SO: 2645902</button>
+                    </div>
+
+                    <div class="lbl-row lbl-center">
+                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, 'P09-BB01-01', 'P09-BB01-01 = TagNo in OMNI')">P09-BB01-01</button>
+                    </div>
+
+                    <div class="lbl-row lbl-codeline">
+                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'P', 'Coating:\nPainted\nBlank = Not Painted')">P</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'A', 'Material Type:\nA = Aluminum\nBlank = Copper')">A</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'UL', 'Joggle Type:\nUL or UL13')">UL</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'FL', 'Type:\nFL = Flat Layer\nDL = Double Layer')">FL</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '143.02', 'System Length in Inches')">143.02</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'T', 'Stack Configuration:\n\nT = Triple Stack,\nBlank = Single Stack,\n D = Double Stack')">T</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '125', 'Width in mm')">125</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" onclick="goToTpConfig('TPN')">TPN</button>
+                    </div>
+
+                    <div class="lbl-bottom">4/2026 5:01:10 PM</div>
+                </div>
+
+                <div id="lblInfo" class="lbl-info" style="display: none;">
+                    <div id="lblInfoTitle" class="lbl-info-title"></div>
+                    <div id="lblInfoText" class="lbl-info-text"></div>
+                    <div id="lblInfoExtra" class="lbl-info-extra"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Вкладка 1: HPB Housing -->
-    <div id="hpbPage" class="page-content active">
+    <div id="hpbPage" class="page-content">
         <div class="container calculator-grid">
             
             <!-- HPB Housing -->
