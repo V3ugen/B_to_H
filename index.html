@@ -15,8 +15,8 @@
 
     <!-- Три вкладки навигации -->
     <div class="nav-tabs">
-        <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">HPBlabel_TPсonfig</button>
-        <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB_Housing</button>
+        <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">Label</button>
+        <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB Housing</button>
         <button type="button" class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
         <button type="button" class="tab-button" onclick="switchPage('tablePage', this)">Reference</button>
     </div>
@@ -269,6 +269,10 @@
         </div>
     </div>
     <div id="appVersion" class="app-version">Version: …</div>
+
+    <div id="eggOverlay" class="egg-overlay" hidden>
+        <img id="eggImg" class="egg-img" alt="" width="374" height="211">
+    </div>
 
     <script src="script.js"></script>
 </body>

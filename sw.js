@@ -1,5 +1,6 @@
-const CACHE_NAME = 'impb-calc-v76';
-const ASSETS = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json', 'icon.png'];
+const CACHE_NAME = 'impb-calc-v77';
+const ASSETS = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json', 'icon.png',
+  'images/egg-1.webp', 'images/egg-2.webp', 'images/egg-3.webp', 'images/egg-4.webp', 'images/egg-5.webp', 'images/egg-6.webp', 'images/egg-7.webp'];
 
 self.addEventListener('install', (e) => {
   // cache: 'reload' - берём файлы с сервера, а не из HTTP-кэша браузера

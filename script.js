@@ -470,3 +470,50 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
     window.addEventListener('touchend', release, { passive: true });
     window.addEventListener('touchcancel', release, { passive: true });
 })();
+
+
+// ---------- Пасхалка: несколько нажатий подряд на версию -> случайная гифка ----------
+(function () {
+    const IMAGES = [1, 2, 3, 4, 5, 6, 7].map(n => 'images/egg-' + n + '.webp');
+    const TAPS_NEEDED = 5;      // сколько нажатий подряд
+    const MAX_GAP_MS = 1500;    // максимальная пауза между нажатиями
+
+    const ver = document.getElementById('appVersion');
+    const overlay = document.getElementById('eggOverlay');
+    const img = document.getElementById('eggImg');
+    if (!ver || !overlay || !img) return;
+
+    let taps = 0, timer = null, bag = [], last = -1;
+
+    function nextImage() {
+        // перемешанная "колода": пока все картинки не показаны, повторов нет
+        if (!bag.length) {
+            bag = IMAGES.map((_, i) => i);
+            for (let i = bag.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [bag[i], bag[j]] = [bag[j], bag[i]];
+            }
+            if (bag[bag.length - 1] === last && bag.length > 1) bag.unshift(bag.pop());
+        }
+        last = bag.pop();
+        return IMAGES[last];
+    }
+
+    function open() {
+        img.removeAttribute('src');
+        img.src = nextImage();          // повторная установка src перезапускает анимацию
+        overlay.hidden = false;
+    }
+    function close() {
+        overlay.hidden = true;
+        img.removeAttribute('src');
+    }
+
+    ver.addEventListener('click', () => {
+        taps++;
+        clearTimeout(timer);
+        timer = setTimeout(() => { taps = 0; }, MAX_GAP_MS);
+        if (taps >= TAPS_NEEDED) { taps = 0; clearTimeout(timer); open(); }
+    });
+    overlay.addEventListener('click', close);
+})();

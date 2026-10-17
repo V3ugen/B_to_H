@@ -522,3 +522,21 @@ html {
     pointer-events: none;
 }
 body.pulling { will-change: transform; }
+
+/* ---------- Пасхалка ---------- */
+.app-version { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; cursor: default; }
+.egg-overlay {
+    position: fixed; inset: 0; z-index: 5000;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px; box-sizing: border-box;
+}
+.egg-overlay[hidden] { display: none; }
+.egg-img {
+    width: min(100%, 560px);
+    aspect-ratio: 374 / 211;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #ddd;
+}
