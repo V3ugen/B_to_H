@@ -417,7 +417,15 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
 (function () {
     const hint = document.createElement('div');
     hint.className = 'pull-hint';
-    hint.textContent = 'made of crap and sticks';
+    const PHRASES = ['Jury-rigged', 'Rigged up', 'Made of shit and sticks', 'Quick-and-dirty'];
+    let lastPhrase = -1;
+    function pickPhrase() {
+        let i;
+        do { i = Math.floor(Math.random() * PHRASES.length); } while (i === lastPhrase && PHRASES.length > 1);
+        lastPhrase = i;
+        hint.textContent = PHRASES[i];
+    }
+    pickPhrase();
     document.documentElement.appendChild(hint);
 
     const body = document.body;
@@ -448,6 +456,7 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
         const dy = e.touches[0].clientY - startY;
         if (!pulling && (dy < 8 || Math.abs(dy) < Math.abs(dx) || window.scrollY > 0)) return;
         if (dy <= 0) { release(); return; }
+        if (!pulling) pickPhrase();
         pulling = true;
         if (e.cancelable) e.preventDefault();
         const max = hint.offsetHeight || 100;
