@@ -491,22 +491,6 @@ html {
     min-height: 100%;
 }
 
-/* Надпись в области над страницей (видна, когда потянешь страницу вниз) */
-html { position: relative; }
-html::before {
-    content: "made of crap and sticks";
-    position: absolute;
-    left: 0; right: 0; bottom: 100%;
-    height: 240px;
-    box-sizing: border-box;
-    padding-bottom: 18px;
-    display: flex; align-items: flex-end; justify-content: center;
-    color: rgba(255, 255, 255, 0.9);
-    font-family: Arial, sans-serif;
-    font-size: 15px; font-weight: bold; letter-spacing: 0.5px;
-    pointer-events: none;
-}
-
 /* ---------- Кнопка сброса и версия ---------- */
 .reset-btn {
     display: block; width: 100%; min-height: 44px;
@@ -522,3 +506,19 @@ html::before {
     text-align: center; color: #6c757d; font-size: 0.8em;
     padding: 16px 0 calc(16px + env(safe-area-inset-bottom, 0px));
 }
+
+/* ---------- Надпись при оттягивании страницы вниз ---------- */
+.pull-hint {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: -1;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    height: calc(env(safe-area-inset-top, 0px) + 56px);
+    line-height: 56px;
+    text-align: center;
+    color: #fff;
+    font-family: Arial, sans-serif; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;
+    opacity: 0;
+    pointer-events: none;
+}
+body.pulling { will-change: transform; }

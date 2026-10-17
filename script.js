@@ -410,3 +410,54 @@ function showTpPanel(el) {
 
 // Показать данные сразу при загрузке (по умолчанию TPN)
 document.addEventListener('DOMContentLoaded', showTpConfiguration);
+
+
+// ---------- Оттягивание страницы вниз: показывает надпись ----------
+// Своя реализация (нативная "резинка" в iOS не даёт ничего нарисовать под страницей)
+(function () {
+    const hint = document.createElement('div');
+    hint.className = 'pull-hint';
+    hint.textContent = 'made of crap and sticks';
+    document.documentElement.appendChild(hint);
+
+    const body = document.body;
+    let startX = 0, startY = 0, tracking = false, pulling = false;
+
+    function release() {
+        if (!tracking && !pulling) return;
+        tracking = false;
+        if (pulling) {
+            body.style.transition = 'transform 0.3s ease';
+            hint.style.transition = 'opacity 0.3s ease';
+            body.style.transform = '';
+            hint.style.opacity = '0';
+            setTimeout(() => { body.style.transition = ''; hint.style.transition = ''; }, 320);
+        }
+        pulling = false;
+    }
+
+    window.addEventListener('touchstart', (e) => {
+        pulling = false;
+        tracking = e.touches.length === 1 && window.scrollY <= 0;
+        if (tracking) { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!tracking) return;
+        const dx = e.touches[0].clientX - startX;
+        const dy = e.touches[0].clientY - startY;
+        if (!pulling && (dy < 8 || Math.abs(dy) < Math.abs(dx) || window.scrollY > 0)) return;
+        if (dy <= 0) { release(); return; }
+        pulling = true;
+        if (e.cancelable) e.preventDefault();
+        const max = hint.offsetHeight || 100;
+        const d = Math.min(max, dy * 0.5);
+        body.style.transition = 'none';
+        body.style.transform = 'translateY(' + d + 'px)';
+        hint.style.transition = 'none';
+        hint.style.opacity = String(Math.min(1, d / (max * 0.8)));
+    }, { passive: false });
+
+    window.addEventListener('touchend', release, { passive: true });
+    window.addEventListener('touchcancel', release, { passive: true });
+})();
