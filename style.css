@@ -490,3 +490,19 @@ html {
     background-repeat: no-repeat;
     min-height: 100%;
 }
+
+/* Надпись в области над страницей (видна, когда потянешь страницу вниз) */
+html { position: relative; }
+html::before {
+    content: "made of crap and sticks";
+    position: absolute;
+    left: 0; right: 0; bottom: 100%;
+    height: 240px;
+    box-sizing: border-box;
+    padding-bottom: 18px;
+    display: flex; align-items: flex-end; justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: Arial, sans-serif;
+    font-size: 15px; font-weight: bold; letter-spacing: 0.5px;
+    pointer-events: none;
+}
