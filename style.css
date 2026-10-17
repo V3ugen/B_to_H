@@ -471,3 +471,12 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 #tpResultBox { margin-top: 0; }
 #tpResultBox .result-item > strong { color: #007bff; }
 #tpResultBox .result-item > span:first-child { color: #495057; }
+
+/* Больше интервалов на этикетке (особенно на iPhone) */
+.lbl-sheet { gap: 24px; }
+.lbl-middle { gap: 60px; }
+@media (max-width: 480px) {
+    .lbl-sheet { gap: 24px; padding: 16px 12px; }
+    .lbl-middle { gap: 54px; }
+    .lbl-codeline { row-gap: 14px; }
+}
