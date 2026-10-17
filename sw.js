@@ -1,4 +1,4 @@
-const CACHE_NAME = 'impb-calc-v58';
+const CACHE_NAME = 'impb-calc-v67';
 const ASSETS = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json', 'icon.png'];
 
 self.addEventListener('install', (e) => {

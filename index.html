@@ -16,7 +16,6 @@
     <!-- Три вкладки навигации -->
     <div class="nav-tabs">
         <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">Label</button>
-        <button type="button" class="tab-button" onclick="switchPage('tpConfigPage', this)">TP Config</button>
         <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB Housing</button>
         <button type="button" class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
         <button type="button" class="tab-button" onclick="switchPage('tablePage', this)">Reference</button>
@@ -55,7 +54,7 @@
                         <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'UL', 'Joggle Type:\nUL or UL13')">UL</button><span class="lbl-sep">-</span>
                         <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'FL', 'Type:\nFL = Flat Layer\nDL = Double Layer')">FL</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '143.02', 'System Length in Inches')">143.02</button><span class="lbl-sep">-</span>
                         <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'T', 'Stack Configuration:\n\nBlank = Single Stack,\nD = Double Stack,\nT = Triple Stack ')">T</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '125', 'Width in mm')">125</button><span class="lbl-sep">-</span>
-                        <button type="button" class="lbl-chip lbl-code" onclick="goToTpConfig('TPN')">TPN</button>
+                        <button type="button" id="lblTpChip" class="lbl-chip lbl-code" onclick="showTpPanel(this)">TPN</button>
                     </div>
 
                     <div class="lbl-bottom">4/2026 5:01:10 PM</div>
@@ -66,6 +65,24 @@
                     <div id="lblInfoText" class="lbl-info-text"></div>
                     <div id="lblInfoExtra" class="lbl-info-extra"></div>
                 </div>
+            </div>
+
+            <div id="lblTpPanel" class="section-box" style="margin-top: 20px;">
+                <div class="section-title">TP Config</div>
+                <div class="input-group">
+                    <label for="tpConfigSelect">Configuration Type</label>
+                    <div class="custom-select-wrapper">
+                        <select id="tpConfigSelect" onchange="showTpConfiguration()">
+                            <option value="TP">TP (3 bars)</option>
+                            <option value="TPE/TPBE">TPE / TPBE (4 bars)</option>
+                            <option value="TPHE/TPBHE">TPHE / TPBHE (5 bars)</option>
+                            <option value="TPN" selected>TPN (4 bars)</option>
+                            <option value="TPNE/TPNBE">TPNE / TPNBE (5 bars)</option>
+                            <option value="TPNHE/TPNBHE">TPNHE / TPNBHE (5 bars)</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="tpResultBox" class="result-box color-complex"></div>
             </div>
         </div>
     </div>
@@ -189,7 +206,7 @@
                         <ul>
                             <li><strong>8mm Bit:</strong> 83 mm</li>
                             <li><strong>10mm Bit (Emmegi CNC):</strong> 45 mm</li>
-                            <li><strong>10mm Bit (Bolero CNC):</strong> 54 mm</li>
+                            <li><strong>10mm Bit (Bolero CNC):</strong> 56 mm</li>
                         </ul>
                     </div>
                 </div>
@@ -248,38 +265,6 @@
             </div>
         </div>
     </div>
-<div id="tpConfigPage" class="page-content">
-    <div class="container">
-        <h2>TP Configuration Selector</h2>
-        <div class="calculator-grid">
-            <div class="section-box">
-                <div class="section-title">Select Configuration</div>
-    <div class="input-group">
-    <label for="tpConfigSelect">Configuration Type</label>
-    <div class="custom-select-wrapper">
-        <select id="tpConfigSelect" onchange="showTpConfiguration()">
-            <option value="">-- Select Type --</option>
-            <option value="TP">TP (3 bars)</option>
-            <option value="TPE/TPBE">TPE / TPBE (4 bars)</option>
-            <option value="TPHE/TPBHE">TPHE / TPBHE (5 bars)</option>
-            <option value="TPN">TPN (4 bars)</option>
-            <option value="TPNE/TPNBE">TPNE / TPNBE (5 bars)</option>
-            <option value="TPNHE/TPNBHE">TPNHE / TPNBHE (5 bars)</option>
-        </select>
-    </div>
-</div>
-
-            </div>
-            <div class="section-box">
-                <div class="section-title">Specifications</div>
-                <div id="tpResultBox" class="result-box color-complex">
-                    Result: Waiting for selection...
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
     <script src="script.js"></script>
 </body>
 </html>

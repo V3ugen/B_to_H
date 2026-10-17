@@ -281,6 +281,32 @@ const tpData = {
     "TPNHE/TPNBHE": { bars: "5 bars", lid: "52.55 MM (HE)", base: "82.95 MM (N)", spacer: "34 MM", notes: "HE - HALF EARTH, N - NEUTRAL" }
 };
 
+
+// ---------- Векторные чертежи LID и BASE (inline SVG, работают офлайн) ----------
+// Размер подписывается внутри чертежа: "49.55 MM (E)" -> "49.55 MM" + "(E)"
+function tpSizeText(value, cx, y1, y2, fs) {
+    const m = String(value || '').match(/^\s*([\d.]+)\s*(?:MM)?\s*\((.+)\)\s*$/i);
+    const l1 = m ? m[1] + ' MM' : String(value || '');
+    const l2 = m ? '(' + m[2] + ')' : '';
+    const st = 'font-family="Arial, sans-serif" font-weight="700" text-anchor="middle" fill="currentColor"';
+    return `<text x="${cx}" y="${y1}" font-size="${fs}" ${st}>${l1}</text>` +
+           (l2 ? `<text x="${cx}" y="${y2}" font-size="${fs}" ${st}>${l2}</text>` : '');
+}
+const TP_PATH = {
+    lid: 'M 52,58 L 397,52 L 399,78 L 362,88 L 362,386 L 389,391 L 389,414 L 1111,414 L 1111,391 L 1138,386 L 1138,88 L 1101,78 L 1103,52 L 1448,58 L 1448,82 L 1426,82 L 1426,70 L 1242,70 Q 1221,70 1221,98 L 1221,190 Q 1221,202 1212,208 Q 1203,202 1203,190 L 1203,92 L 1156,92 L 1156,396 L 1184,396 L 1184,438 L 316,438 L 316,396 L 344,396 L 344,92 L 297,92 L 297,190 Q 297,202 288,208 Q 279,202 279,190 L 279,98 Q 279,70 258,70 L 74,70 L 74,82 L 52,82 Z',
+    base: 'M300 100 L285 112 L300 125 V860 Q300 880 280 880 H90 V900 H390 V885 H345 Q325 885 325 865 V590 Q325 575 345 575 H1155 Q1175 575 1175 590 V865 Q1175 885 1155 885 H1110 V900 H1410 V880 H1220 Q1200 880 1200 860 V125 L1215 112 L1200 100 L1180 112 V555 H320 V112 Z'
+};
+function tpDrawing(kind, value) {
+    if (kind === 'lid') {
+        return '<div class="tp-drawing tp-drawing-lid"><svg viewBox="0 -185 1500 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LID">' +
+            '<path d="' + TP_PATH.lid + '" fill="#fff" fill-rule="evenodd" stroke="currentColor" stroke-width="1.3" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>' +
+            tpSizeText(value, 750, 195, 325, 120) + '</svg></div>';
+    }
+    return '<div class="tp-drawing"><svg viewBox="0 70 1500 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BASE">' +
+        '<path d="' + TP_PATH.base + '" fill="#fff" stroke="currentColor" stroke-width="1.3" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>' +
+        tpSizeText(value, 750, 290, 430, 120) + '</svg></div>';
+}
+
 // Функция отображения выбранной конфигурации
 function showTpConfiguration() {
     const selectEl = document.getElementById('tpConfigSelect');
@@ -288,6 +314,8 @@ function showTpConfiguration() {
     if (!selectEl || !display) return;
 
     const selectedType = selectEl.value;
+    const chip = document.getElementById('lblTpChip');
+    if (chip && selectedType) chip.textContent = selectedType.split('/')[0];
 
     if (!selectedType) {
         display.innerHTML = "Result: Waiting for selection...";
@@ -297,8 +325,8 @@ function showTpConfiguration() {
     const data = tpData[selectedType];
     display.innerHTML = `
         <div class="result-item"><span style="color: #495057;">Bars:</span> ${data.bars}</div>
-        <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${data.lid}</strong></div>
-        <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${data.base}</strong></div>
+        <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${data.lid}</strong>${tpDrawing('lid', data.lid)}</div>
+        <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${data.base}</strong>${tpDrawing('base', data.base)}</div>
         <div class="result-item"><span class="spacer-size"><span>SPACER SIZE:</span> <strong>${data.spacer}</strong></span></div>
         <div class="result-item" style="font-size: 0.85em; font-weight: normal; color: #6c757d; margin-top: 10px;">Note: ${data.notes}</div>
     `;
@@ -321,8 +349,8 @@ function showLabelInfo(el, title, message, tpKey) {
         extra.innerHTML = `
             <div class="lbl-extra-title">TP Config: ${tpKey}</div>
             <div class="result-item"><span style="color: #495057;">Bars:</span> <strong>${d.bars}</strong></div>
-            <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${d.lid}</strong></div>
-            <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${d.base}</strong></div>
+            <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${d.lid}</strong>${tpDrawing('lid', d.lid)}</div>
+            <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${d.base}</strong>${tpDrawing('base', d.base)}</div>
             <div class="result-item"><span class="spacer-size"><span>SPACER SIZE:</span> <strong>${d.spacer}</strong></span></div>
             <div class="result-item" style="font-size: 0.85em; color: #6c757d;">Note: ${d.notes}</div>
         `;
@@ -331,11 +359,19 @@ function showLabelInfo(el, title, message, tpKey) {
 }
 
 
-// Label -> TP Config: переключить вкладку и выбрать конфигурацию
-function goToTpConfig(key) {
-    const tabBtn = document.querySelector(".tab-button[onclick*=\"'tpConfigPage'\"]");
-    switchPage('tpConfigPage', tabBtn);
-    const sel = document.getElementById('tpConfigSelect');
-    if (sel) { sel.value = key; showTpConfiguration(); }
-    window.scrollTo(0, 0);
+// Label: перейти к блоку TP Config ниже на странице
+function showTpPanel(el) {
+    document.querySelectorAll('#labelPage .lbl-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    const lblInfo = document.getElementById('lblInfo');
+    if (lblInfo) lblInfo.style.display = 'none';
+    const panel = document.getElementById('lblTpPanel');
+    if (!panel) return;
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    panel.classList.remove('flash');
+    void panel.offsetWidth;
+    panel.classList.add('flash');
 }
+
+// Показать данные сразу при загрузке (по умолчанию TPN)
+document.addEventListener('DOMContentLoaded', showTpConfiguration);

@@ -431,3 +431,43 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 
 /* Won / SO - побольше расстояние между кнопками */
 .lbl-middle { gap: 20px; }
+
+/* ---------- Reference table: компактнее, меньше пустого места ---------- */
+#dataTable { min-width: 0; width: auto; }
+#dataTable th, #dataTable td { padding: 8px 6px; }
+#dataTable th:not(:first-child), #dataTable td:not(:first-child) { min-width: 56px; text-align: center; }
+#dataTable th:first-child, #dataTable td:first-child {
+    position: sticky; left: 0; z-index: 2;
+    white-space: normal;
+    min-width: 78px; max-width: 92px;
+    word-break: break-word;
+    box-shadow: 2px 0 3px rgba(0,0,0,0.12);
+}
+#dataTable th:first-child { background-color: #007bff; z-index: 3; }
+
+/* Won / SO - увеличенный зазор между кнопками */
+.lbl-middle { gap: 40px; flex-wrap: nowrap; }
+@media (max-width: 480px) {
+    .lbl-middle { gap: 32px; }
+    .lbl-middle .lbl-chip { padding: 6px 6px; font-size: 0.9em; }
+}
+
+/* ---------- Чертежи LID / BASE ---------- */
+.tp-drawing {
+    margin-top: 6px;
+    padding: 8px 10px;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    color: #343a40;
+    line-height: 0;
+}
+.tp-drawing svg { display: block; width: 100%; max-width: 240px; height: auto; margin: 0 auto; }
+
+/* ---------- TP Config внутри Label ---------- */
+#lblTpPanel { scroll-margin-top: 70px; }
+#lblTpPanel.flash { animation: tpFlash 1.2s ease; }
+@keyframes tpFlash { 0%, 60% { border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.25); } 100% { border-color: #e9ecef; box-shadow: none; } }
+#tpResultBox { margin-top: 0; }
+#tpResultBox .result-item > strong { color: #007bff; }
+#tpResultBox .result-item > span:first-child { color: #495057; }

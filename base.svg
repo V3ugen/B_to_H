@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1000" viewBox="0 0 1500 1000">
+<g fill="none" stroke="#111820" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+<!-- left upright with small top cap and foot -->
+<path d="M300 100 L285 112 L300 125 V860 Q300 880 280 880 H90 V900 H390 V885 H345 Q325 885 325 865 V590 Q325 575 345 575 H1155 Q1175 575 1175 590 V865 Q1175 885 1155 885 H1110 V900 H1410 V880 H1220 Q1200 880 1200 860 V125 L1215 112 L1200 100 L1180 112 V555 H320 V112 Z"/>
+</g></svg>
