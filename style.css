@@ -506,3 +506,19 @@ html::before {
     font-size: 15px; font-weight: bold; letter-spacing: 0.5px;
     pointer-events: none;
 }
+
+/* ---------- Кнопка сброса и версия ---------- */
+.reset-btn {
+    display: block; width: 100%; min-height: 44px;
+    padding: 10px 14px;
+    background: #fff; color: #dc3545;
+    border: 2px solid #dc3545; border-radius: 6px;
+    font-size: 1em; font-weight: bold; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.reset-btn:active { background: #fff5f5; }
+
+.app-version {
+    text-align: center; color: #6c757d; font-size: 0.8em;
+    padding: 16px 0 calc(16px + env(safe-area-inset-bottom, 0px));
+}

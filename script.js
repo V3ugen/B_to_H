@@ -270,6 +270,39 @@ function clearInputField(inputId, calculationFunction) {
     if (inputEl) { inputEl.value = ""; calculationFunction(); }
 }
 
+// Сброс на вкладках HPB Housing и IMPB: поля, результаты и список последних размеров
+function clearHistory(key, renderFunc) {
+    try { localStorage.removeItem(key); } catch(e) {}
+    renderFunc();
+}
+function resetHpb() {
+    clearInputField('directInput', calculateDirect);
+    clearInputField('reverseInput', calculateReverse);
+    clearInputField('boltLengthInput', calculateSupportHoles);
+    clearHistory(KEY_DIRECT, renderDirectHistory);
+    clearHistory(KEY_REVERSE, renderReverseHistory);
+}
+function resetImpb() {
+    clearInputField('complexInput1', calculateComplex);
+    clearInputField('complexInput2', calculateComplex);
+    clearHistory(KEY_COMPLEX, renderComplexHistory);
+}
+
+// Версия приложения = версия кэша service worker (impb-calc-vNN из sw.js)
+function showAppVersion() {
+    const el = document.getElementById('appVersion');
+    if (!el) return;
+    if (!('caches' in window)) { el.textContent = 'Version: unknown'; return; }
+    caches.keys().then(keys => {
+        const nums = keys.map(k => (k.match(/^impb-calc-v(\d+)$/) || [])[1]).filter(Boolean).map(Number);
+        el.textContent = nums.length ? 'Version: v' + Math.max(...nums) : 'Version: not cached yet';
+    }).catch(() => { el.textContent = 'Version: unknown'; });
+}
+document.addEventListener('DOMContentLoaded', showAppVersion);
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('controllerchange', () => setTimeout(showAppVersion, 500));
+}
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
 }

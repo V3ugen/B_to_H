@@ -15,8 +15,8 @@
 
     <!-- Три вкладки навигации -->
     <div class="nav-tabs">
-        <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">Label&TPconfig</button>
-        <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB Housing</button>
+        <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">HPBlabel_TPсonfig</button>
+        <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB_Housing</button>
         <button type="button" class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
         <button type="button" class="tab-button" onclick="switchPage('tablePage', this)">Reference</button>
     </div>
@@ -132,6 +132,8 @@
                 <div id="resBoltHoles" class="result-box color-bolt">Result: Waiting for input...</div>
             </div>
 
+            <button type="button" class="reset-btn" style="grid-column: 1 / -1;" onclick="resetHpb()">Reset all fields</button>
+
         </div>
     </div>
 
@@ -162,6 +164,7 @@
                 </div>
                 <div id="complexHistory" class="history-box" style="display: none;"></div>
             </div>
+            <button type="button" class="reset-btn" style="margin-top: 15px;" onclick="resetImpb()">Reset all fields</button>
         </div>
     </div>
 
@@ -265,6 +268,8 @@
             </div>
         </div>
     </div>
+    <div id="appVersion" class="app-version">Version: …</div>
+
     <script src="script.js"></script>
 </body>
 </html>
