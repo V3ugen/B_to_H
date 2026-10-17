@@ -480,3 +480,13 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
     .lbl-middle { gap: 54px; }
     .lbl-codeline { row-gap: 14px; }
 }
+
+/* Область за краями страницы (оттяжка вниз / обновление на iPhone):
+   сверху синий цвет шапки, снизу цвет фона страницы */
+html {
+    background-color: #007bff;
+    background-image: linear-gradient(to bottom, #007bff 0, #007bff 50%, #f4f4f9 50%, #f4f4f9 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100%;
+}
