@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="icon.png">
-    <title>Work Notes</title>
+    <title>Bar to Housing & IMPB Calculator</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
@@ -15,10 +15,10 @@
 
     <!-- Три вкладки навигации -->
     <div class="nav-tabs">
-        <button type="button" class="tab-button active" onclick="switchPage('labelPage', this)">HPB_Label&TP_Config</button>
-        <button type="button" class="tab-button" onclick="switchPage('hpbPage', this)">HPB_Housing</button>
-        <button type="button" class="tab-button" onclick="switchPage('impbPage', this)">IMPB</button>
-        <button type="button" class="tab-button" onclick="switchPage('tablePage', this)">Reference</button>
+        <button type="button" class="tab-button active" data-target="labelPage">HPB_Label&TP_Config</button>
+        <button type="button" class="tab-button" data-target="hpbPage">HPB_Housing</button>
+        <button type="button" class="tab-button" data-target="impbPage">IMPB</button>
+        <button type="button" class="tab-button" data-target="tablePage">Reference</button>
     </div>
 
     <!-- Вкладка 1: HPB Label (интерактивная этикетка) -->
@@ -36,25 +36,25 @@
 
                 <div class="lbl-sheet">
                     <div class="lbl-row lbl-top">
-                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, '61512BU', '61512BU = Project ID in OMNI')">61512BU</button>
+                        <button type="button" class="lbl-chip lbl-data" data-chip data-title="61512BU" data-message="61512BU = Project ID in OMNI">61512BU</button>
                     </div>
 
                     <div class="lbl-row lbl-middle">
-                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, 'WON: 24344820', 'WON = Job ID in OMNI\nValue: 24344820')">Won: 24344820</button>
-                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, 'SO: 2645902', 'SO = ShopOrderNo in OMNI\nValue: 2645902')">SO: 2645902</button>
+                        <button type="button" class="lbl-chip lbl-data" data-chip data-title="WON: 24344820" data-message="WON = Job ID in OMNI&#10;Value: 24344820">Won: 24344820</button>
+                        <button type="button" class="lbl-chip lbl-data" data-chip data-title="SO: 2645902" data-message="SO = ShopOrderNo in OMNI&#10;Value: 2645902">SO: 2645902</button>
                     </div>
 
                     <div class="lbl-row lbl-center">
-                        <button type="button" class="lbl-chip lbl-data" onclick="showLabelInfo(this, 'P09-BB01-01', 'P09-BB01-01 = TagNo in OMNI')">P09-BB01-01</button>
+                        <button type="button" class="lbl-chip lbl-data" data-chip data-title="P09-BB01-01" data-message="P09-BB01-01 = TagNo in OMNI">P09-BB01-01</button>
                     </div>
 
                     <div class="lbl-row lbl-codeline">
-                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'P', 'Coating:\nPainted\nBlank = Not Painted')">P</button><span class="lbl-sep">-</span>
-                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'A', 'Material Type:\nA = Aluminum\nBlank = Copper')">A</button><span class="lbl-sep">-</span>
-                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'UL', 'Joggle Type:\nUL or UL13')">UL</button><span class="lbl-sep">-</span>
-                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'FL', 'Type:\nFL = Flat Layer\nDL = Double Layer')">FL</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '143.02', 'System Length in Inches')">143.02</button><span class="lbl-sep">-</span>
-                        <button type="button" class="lbl-chip lbl-code" onclick="showLabelInfo(this, 'T', 'Stack Configuration:\n\nBlank = Single Stack,\nD = Double Stack,\nT = Triple Stack ')">T</button><button type="button" class="lbl-chip lbl-num" onclick="showLabelInfo(this, '125', 'Width in mm')">125</button><span class="lbl-sep">-</span>
-                        <button type="button" id="lblTpChip" class="lbl-chip lbl-code" onclick="showTpPanel(this)">TPN</button>
+                        <button type="button" class="lbl-chip lbl-code" data-chip data-title="P" data-message="Coating:&#10;Painted&#10;Blank = Not Painted">P</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" data-chip data-title="A" data-message="Material Type:&#10;A = Aluminum&#10;Blank = Copper">A</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" data-chip data-title="UL" data-message="Joggle Type:&#10;UL or UL13">UL</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" data-chip data-title="FL" data-message="Type:&#10;FL = Flat Layer&#10;DL = Double Layer">FL</button><button type="button" class="lbl-chip lbl-num" data-chip data-title="143.02" data-message="System Length in Inches">143.02</button><span class="lbl-sep">-</span>
+                        <button type="button" class="lbl-chip lbl-code" data-chip data-title="T" data-message="Stack Configuration:&#10;&#10;Blank = Single Stack,&#10;D = Double Stack,&#10;T = Triple Stack ">T</button><button type="button" class="lbl-chip lbl-num" data-chip data-title="125" data-message="Width in mm">125</button><span class="lbl-sep">-</span>
+                        <button type="button" id="lblTpChip" class="lbl-chip lbl-code" data-action="tp-panel">TPN</button>
                     </div>
 
                     <div class="lbl-bottom">4/2026 5:01:10 PM</div>
@@ -72,7 +72,7 @@
                 <div class="input-group">
                     <label for="tpConfigSelect">Configuration Type</label>
                     <div class="custom-select-wrapper">
-                        <select id="tpConfigSelect" onchange="showTpConfiguration()">
+                        <select id="tpConfigSelect">
                             <option value="TP">TP (3 bars)</option>
                             <option value="TPE/TPBE">TPE / TPBE (4 bars)</option>
                             <option value="TPHE/TPBHE">TPHE / TPBHE (5 bars)</option>
@@ -97,8 +97,8 @@
                 <div class="input-group">
                     <label for="directInput">Enter Housing:</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="directInput" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateDirect)">
-                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('directInput', calculateDirect)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="directInput" placeholder="Inches">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" data-clear="directInput">×</button>
                     </div>
                 </div>
                 <div id="directDisplay" class="result-box color-direct">Waiting for input...</div>
@@ -111,8 +111,8 @@
                 <div class="input-group">
                     <label for="reverseInput">Enter Length:</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="reverseInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateReverse)">
-                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('reverseInput', calculateReverse)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="reverseInput" placeholder="Millimeters">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" data-clear="reverseInput">×</button>
                     </div>
                 </div>
                 <div id="reverseDisplay" class="result-box color-reverse">Waiting for input...</div>
@@ -125,14 +125,14 @@
                 <div class="input-group">
                     <label for="boltLengthInput">Enter Length:</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="boltLengthInput" placeholder="Millimeters" oninput="sanitizeAndCalculate(this, calculateSupportHoles)">
-                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('boltLengthInput', calculateSupportHoles)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="boltLengthInput" placeholder="Millimeters">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" data-clear="boltLengthInput">×</button>
                     </div>
                 </div>
                 <div id="resBoltHoles" class="result-box color-bolt">Result: Waiting for input...</div>
             </div>
 
-            <button type="button" class="reset-btn" style="grid-column: 1 / -1;" onclick="resetHpb()">Reset all fields</button>
+            <button type="button" class="reset-btn" style="grid-column: 1 / -1;" data-action="reset-hpb">Reset all fields</button>
 
         </div>
     </div>
@@ -145,15 +145,15 @@
                 <div class="input-group">
                     <label for="complexInput1">Enter feet (optional):</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput1" placeholder="Feet" oninput="sanitizeAndCalculate(this, calculateComplex)">
-                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('complexInput1', calculateComplex)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput1" placeholder="Feet">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" data-clear="complexInput1">×</button>
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="complexInput2">Enter inches (optional):</label>
                     <div class="search-container">
-                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput2" placeholder="Inches" oninput="sanitizeAndCalculate(this, calculateComplex)">
-                        <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearInputField('complexInput2', calculateComplex)">×</button>
+                        <input type="text" inputmode="decimal" autocomplete="off" id="complexInput2" placeholder="Inches">
+                        <button type="button" aria-label="Clear" class="search-clear-btn" data-clear="complexInput2">×</button>
                     </div>
                 </div>
                 <div class="result-box color-complex">
@@ -164,7 +164,7 @@
                 </div>
                 <div id="complexHistory" class="history-box" style="display: none;"></div>
             </div>
-            <button type="button" class="reset-btn" style="margin-top: 15px;" onclick="resetImpb()">Reset all fields</button>
+            <button type="button" class="reset-btn" style="margin-top: 15px;" data-action="reset-impb">Reset all fields</button>
         </div>
     </div>
 
@@ -175,8 +175,8 @@
             
             <div class="input-group" style="margin-bottom: 20px;">
                 <div class="search-container">
-                    <input type="text" inputmode="decimal" autocomplete="off" id="tableSearch" class="search-box" placeholder="Search model..." oninput="sanitizeSearchAndFilter(this)">
-                    <button type="button" aria-label="Clear" class="search-clear-btn" onclick="clearTableSearch()">×</button>
+                    <input type="text" inputmode="decimal" autocomplete="off" id="tableSearch" class="search-box" placeholder="Search model...">
+                    <button type="button" aria-label="Clear" class="search-clear-btn" data-action="clear-table-search">×</button>
                 </div>
             </div>
 

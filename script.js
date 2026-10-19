@@ -1,3 +1,18 @@
+const INCH_TO_MM = 25.4;
+const HOUSING_OFFSET = 261;
+const BARS_OFFSET = 51;
+const IMPB_HOUSING_OFFSET = 236;
+const IMPB_INSULATOR_OFFSET = 193;
+const IMPB_CONDUCTOR_OFFSET = 42;
+
+const KEY_DIRECT = 'hpbHousingHistory';
+const KEY_REVERSE = 'barsReverseHistory';
+const KEY_COMPLEX = 'impbComplexHistory';
+
+let directTimer = null;
+let reverseTimer = null;
+let complexTimer = null;
+
 const tableData = [
     ["DL144-200", "237.8", "822", "1406.2", "1990.4", "2574.6", "3158.8"],
     ["DL144 80-TPNBE", "237.8", "822", "1406.2", "1990.4", "2574.6", "3158.8"],
@@ -33,9 +48,20 @@ const tableData = [
     ["DL39.13-200-TPBE", "366.6", "", "", "", "", ""],
     ["DL34 115-TPNBE", "301.3", "", "", "", "", ""]
 ];
+
 document.addEventListener("DOMContentLoaded", () => {
+    renderTable();
+    bindEvents();
+    restoreLastPage();
+    renderAllHistories();
+    showAppVersion();
+    registerSW();
+    showTpConfiguration();
+});
+
+function renderTable() {
     const tbody = document.getElementById("tableBody");
-    if(!tbody) return;
+    if (!tbody) return;
     tableData.forEach(row => {
         const tr = document.createElement("tr");
         row.forEach((cell, index) => {
@@ -44,35 +70,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 td.innerHTML = `<strong>${cell}</strong>`;
             } else {
                 td.textContent = cell === "" ? "—" : cell;
-                if(cell === "") td.style.textAlign = "center";
+                if (cell === "") td.style.textAlign = "center";
             }
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
     });
-});
+}
 
 function switchPage(pageId, buttonElement) {
     document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
     
     const targetPage = document.getElementById(pageId);
-    if(targetPage) targetPage.classList.add('active');
-    if(buttonElement) {
+    if (targetPage) targetPage.classList.add('active');
+    if (buttonElement) {
         buttonElement.classList.add('active');
         buttonElement.scrollIntoView({ inline: 'center', block: 'nearest' });
     }
     try { localStorage.setItem('lastPage', pageId); } catch(e) {}
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function restoreLastPage() {
     let last = null;
     try { last = localStorage.getItem('lastPage'); } catch(e) {}
-    const btn = last && document.querySelector(`.tab-button[onclick*="'${last}'"]`);
+    if (!last) return;
+    const btn = document.querySelector(`.tab-button[data-target="${last}"]`);
     if (btn) switchPage(last, btn);
-});
+}
 
-// ФИКС ОШИБКИ: Теперь строки обрабатываются корректно без падения движка JS
+// ФИКС ОШИБКИ: строки обрабатываются корректно без падения движка JS
 function sanitizeAndCalculate(inputElement, calculationFunction) {
     let value = inputElement.value.replace(/,/g, '.').replace(/[^0-9.]/g, '');
     const parts = value.split('.');
@@ -91,13 +118,6 @@ function sanitizeAndCalculate(inputElement, calculationFunction) {
     }
     calculationFunction();
 }
-let directTimer = null;
-let reverseTimer = null;
-let complexTimer = null;
-
-const KEY_DIRECT = 'hpbHousingHistory';
-const KEY_REVERSE = 'barsReverseHistory';
-const KEY_COMPLEX = 'impbComplexHistory';
 
 // 1. HPB HOUSING
 function calculateDirect() {
@@ -105,7 +125,7 @@ function calculateDirect() {
     const display = document.getElementById('directDisplay');
     clearTimeout(directTimer);
     if (val !== "" && val !== "-" && val !== ".") {
-        const res = ((parseFloat(val) * 25.4) - 261).toFixed(1);
+        const res = ((parseFloat(val) * INCH_TO_MM) - HOUSING_OFFSET).toFixed(1);
         display.textContent = parseFloat(res) <= 0 ? "Housing too small" : "Housing millimeters: " + res;
         directTimer = setTimeout(() => commitHistory(KEY_DIRECT, val, res, renderDirectHistory), 1500);
     } else { display.textContent = "Waiting for input..."; }
@@ -117,7 +137,7 @@ function calculateReverse() {
     const display = document.getElementById('reverseDisplay');
     clearTimeout(reverseTimer);
     if (val !== "" && val !== "-" && val !== ".") {
-        const result = (parseFloat(val) + 51) / 25.4;
+        const result = (parseFloat(val) + BARS_OFFSET) / INCH_TO_MM;
         const resStr = result.toFixed(2);
         display.textContent = "Housing is: " + resStr + " inches";
         reverseTimer = setTimeout(() => commitHistory(KEY_REVERSE, val, resStr, renderReverseHistory), 1500);
@@ -133,11 +153,11 @@ function calculateComplex() {
     clearTimeout(complexTimer);
 
     if (isV1 || isV2) {
-        const r1 = ((isV1 ? parseFloat(val1) : 0) * 12 + (isV2 ? parseFloat(val2) : 0)) * 25.4;
+        const r1 = ((isV1 ? parseFloat(val1) : 0) * 12 + (isV2 ? parseFloat(val2) : 0)) * INCH_TO_MM;
         document.getElementById('resComplex1').textContent = "In millimeters: " + r1.toFixed(1);
-        document.getElementById('resComplex3').textContent = "Housings: " + (r1 - 236).toFixed(1);
-        document.getElementById('resComplex2').textContent = "Insulators: " + (r1 - 193).toFixed(1);
-        document.getElementById('resComplex4').textContent = "Conductors: " + (r1 - 42).toFixed(1);
+        document.getElementById('resComplex3').textContent = "Housings: " + (r1 - IMPB_HOUSING_OFFSET).toFixed(1);
+        document.getElementById('resComplex2').textContent = "Insulators: " + (r1 - IMPB_INSULATOR_OFFSET).toFixed(1);
+        document.getElementById('resComplex4').textContent = "Conductors: " + (r1 - IMPB_CONDUCTOR_OFFSET).toFixed(1);
 
         const summaryInput = (val1 || '0') + ' ft / ' + (val2 || '0') + ' in';
         complexTimer = setTimeout(() => commitHistory(KEY_COMPLEX, summaryInput, r1.toFixed(1) + ' mm', renderComplexHistory), 1500);
@@ -166,6 +186,12 @@ function commitHistory(key, inputVal, resultVal, renderFunc) {
 function renderDirectHistory() { buildHistoryUI('directHistory', KEY_DIRECT, 'hpb'); }
 function renderReverseHistory() { buildHistoryUI('reverseHistory', KEY_REVERSE, 'bars'); }
 function renderComplexHistory() { buildHistoryUI('complexHistory', KEY_COMPLEX, 'impb'); }
+
+function renderAllHistories() {
+    renderDirectHistory();
+    renderReverseHistory();
+    renderComplexHistory();
+}
 
 function buildHistoryUI(boxId, storageKey, type) {
     const box = document.getElementById(boxId);
@@ -205,12 +231,6 @@ function buildHistoryUI(boxId, storageKey, type) {
         box.appendChild(b);
     });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    renderDirectHistory();
-    renderReverseHistory();
-    renderComplexHistory();
-});
 
 // SUPPORT BOLT HOLE
 function calculateSupportHoles() {
@@ -270,11 +290,11 @@ function clearInputField(inputId, calculationFunction) {
     if (inputEl) { inputEl.value = ""; calculationFunction(); }
 }
 
-// Сброс на вкладках HPB Housing и IMPB: поля, результаты и список последних размеров
 function clearHistory(key, renderFunc) {
     try { localStorage.removeItem(key); } catch(e) {}
     renderFunc();
 }
+
 function resetHpb() {
     clearInputField('directInput', calculateDirect);
     clearInputField('reverseInput', calculateReverse);
@@ -282,6 +302,7 @@ function resetHpb() {
     clearHistory(KEY_DIRECT, renderDirectHistory);
     clearHistory(KEY_REVERSE, renderReverseHistory);
 }
+
 function resetImpb() {
     clearInputField('complexInput1', calculateComplex);
     clearInputField('complexInput2', calculateComplex);
@@ -298,14 +319,14 @@ function showAppVersion() {
         el.textContent = nums.length ? 'Version: v' + Math.max(...nums) : 'Version: not cached yet';
     }).catch(() => { el.textContent = 'Version: unknown'; });
 }
-document.addEventListener('DOMContentLoaded', showAppVersion);
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('controllerchange', () => setTimeout(showAppVersion, 500));
+
+function registerSW() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+        navigator.serviceWorker.addEventListener('controllerchange', () => setTimeout(showAppVersion, 500));
+    }
 }
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
-}
 // База данных конфигураций с фотографии 
 const tpData = {
     "TP": { bars: "3 bars", lid: "56.55 MM (TP)", base: "75.95 (TP)", spacer: "23 MM", notes: "HE - HALF EARTH, BE - BARE HALF EARTH" },
@@ -316,9 +337,7 @@ const tpData = {
     "TPNHE/TPNBHE": { bars: "5 bars", lid: "52.55 MM (HE)", base: "82.95 MM (N)", spacer: "34 MM", notes: "HE - HALF EARTH, N - NEUTRAL" }
 };
 
-
 // ---------- Векторные чертежи LID и BASE (inline SVG, работают офлайн) ----------
-// Размер подписывается внутри чертежа: "49.55 MM (E)" -> "49.55 MM" + "(E)"
 function tpSizeText(value, cx, y1, y2, fs) {
     const m = String(value || '').match(/^\s*([\d.]+)\s*(?:MM)?\s*\((.+)\)\s*$/i);
     const l1 = m ? m[1] + ' MM' : String(value || '');
@@ -367,9 +386,7 @@ function showTpConfiguration() {
     `;
 }
 
-
 // HPB Label: показать пояснение к выбранной части этикетки.
-// Если передан tpKey, спецификация подтягивается из tpData (вкладка TP Config).
 function showLabelInfo(el, title, message, tpKey) {
     document.querySelectorAll('#labelPage .lbl-chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
@@ -393,7 +410,6 @@ function showLabelInfo(el, title, message, tpKey) {
     document.getElementById('lblInfo').style.display = 'block';
 }
 
-
 // Label: перейти к блоку TP Config ниже на странице
 function showTpPanel(el) {
     document.querySelectorAll('#labelPage .lbl-chip').forEach(c => c.classList.remove('active'));
@@ -408,12 +424,7 @@ function showTpPanel(el) {
     panel.classList.add('flash');
 }
 
-// Показать данные сразу при загрузке (по умолчанию TPN)
-document.addEventListener('DOMContentLoaded', showTpConfiguration);
-
-
 // ---------- Оттягивание страницы вниз: показывает надпись ----------
-// Своя реализация (нативная "резинка" в iOS не даёт ничего нарисовать под страницей)
 (function () {
     const hint = document.createElement('div');
     hint.className = 'pull-hint';
@@ -471,12 +482,11 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
     window.addEventListener('touchcancel', release, { passive: true });
 })();
 
-
 // ---------- Пасхалка: несколько нажатий подряд на версию -> случайная гифка ----------
 (function () {
     const IMAGES = [1, 2, 3, 4, 5, 6, 7].map(n => 'images/egg-' + n + '.webp');
-    const TAPS_NEEDED = 5;      // сколько нажатий подряд
-    const MAX_GAP_MS = 1500;    // максимальная пауза между нажатиями
+    const TAPS_NEEDED = 5;
+    const MAX_GAP_MS = 1500;
 
     const ver = document.getElementById('appVersion');
     const overlay = document.getElementById('eggOverlay');
@@ -486,7 +496,6 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
     let taps = 0, timer = null, bag = [], last = -1;
 
     function nextImage() {
-        // перемешанная "колода": пока все картинки не показаны, повторов нет
         if (!bag.length) {
             bag = IMAGES.map((_, i) => i);
             for (let i = bag.length - 1; i > 0; i--) {
@@ -501,7 +510,7 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
 
     function open() {
         img.removeAttribute('src');
-        img.src = nextImage();          // повторная установка src перезапускает анимацию
+        img.src = nextImage();
         overlay.hidden = false;
     }
     function close() {
@@ -517,3 +526,81 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
     });
     overlay.addEventListener('click', close);
 })();
+
+function bindEvents() {
+    // Вкладки
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchPage(btn.dataset.target, btn);
+        });
+    });
+
+    // Чипы этикетки
+    document.querySelectorAll('[data-chip]').forEach(chip => {
+        chip.addEventListener('click', () => {
+            showLabelInfo(
+                chip,
+                chip.dataset.title || '',
+                chip.dataset.message || '',
+                chip.dataset.tpkey || undefined
+            );
+        });
+    });
+
+    // TP Config: выбор конфигурации
+    const tpSelect = document.getElementById('tpConfigSelect');
+    if (tpSelect) {
+        tpSelect.addEventListener('change', showTpConfiguration);
+    }
+
+    // TP chip внутри этикетки -> открыть панель TP Config
+    const tpChip = document.getElementById('lblTpChip');
+    if (tpChip) {
+        tpChip.addEventListener('click', () => showTpPanel(tpChip));
+    }
+
+    // Калькуляторы с авто-пересчётом по вводу
+    const inputs = [
+        { id: 'directInput', fn: calculateDirect },
+        { id: 'reverseInput', fn: calculateReverse },
+        { id: 'boltLengthInput', fn: calculateSupportHoles },
+        { id: 'complexInput1', fn: calculateComplex },
+        { id: 'complexInput2', fn: calculateComplex }
+    ];
+    inputs.forEach(({ id, fn }) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => sanitizeAndCalculate(el, fn));
+    });
+
+    // Кнопки очистки полей
+    document.querySelectorAll('[data-clear]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const inputId = btn.dataset.clear;
+            let fn;
+            if (inputId === 'directInput') fn = calculateDirect;
+            else if (inputId === 'reverseInput') fn = calculateReverse;
+            else if (inputId === 'boltLengthInput') fn = calculateSupportHoles;
+            else if (inputId === 'complexInput1' || inputId === 'complexInput2') fn = calculateComplex;
+            clearInputField(inputId, fn);
+        });
+    });
+
+    // Кнопки сброса
+    document.querySelectorAll('[data-action="reset-hpb"]').forEach(btn => {
+        btn.addEventListener('click', resetHpb);
+    });
+    document.querySelectorAll('[data-action="reset-impb"]').forEach(btn => {
+        btn.addEventListener('click', resetImpb);
+    });
+
+    // Поиск по таблице
+    const tableSearch = document.getElementById('tableSearch');
+    if (tableSearch) {
+        tableSearch.addEventListener('input', () => sanitizeSearchAndFilter(tableSearch));
+    }
+
+    const clearTableBtn = document.querySelector('[data-action="clear-table-search"]');
+    if (clearTableBtn) {
+        clearTableBtn.addEventListener('click', clearTableSearch);
+    }
+}

@@ -236,14 +236,13 @@ input {
 }
 .history-item:active { background: #e9f7ee; }
 .history-item:last-child { margin-bottom: 0; }
-/* Контейнер для выпадающего списка с кастомной стрелочкой */
+
 .custom-select-wrapper {
     position: relative;
     width: 100%;
     margin-top: 5px;
 }
 
-/* Красивое оформление поля выбора */
 .custom-select-wrapper select {
     width: 100%;
     padding: 12px 40px 12px 14px;
@@ -256,14 +255,11 @@ input {
     cursor: pointer;
     font-weight: 500;
     transition: border-color 0.15s ease, background-color 0.15s ease;
-    
-    /* Скрываем стандартную системную стрелочку */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
 
-/* Эффект при наведении и фокусе */
 .custom-select-wrapper select:hover {
     border-color: #ced4da;
     background-color: #fff;
@@ -275,7 +271,6 @@ input {
     outline: none;
 }
 
-/* Создание новой аккуратной стрелочки справа */
 .custom-select-wrapper::after {
     content: "";
     position: absolute;
@@ -287,15 +282,13 @@ input {
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 6px solid #6c757d;
-    pointer-events: none; /* Чтобы клик проходил сквозь стрелочку */
+    pointer-events: none;
 }
 
-/* Меняем цвет стрелочки при активном фокусе */
 .custom-select-wrapper:focus-within::after {
     border-top-color: #007bff;
 }
 
-/* Дополнительные штрихи для аккуратного разделителя в блоке */
 .section-title {
     font-size: 1.15em;
     font-weight: 700;
@@ -306,7 +299,6 @@ input {
     letter-spacing: 0.3px;
 }
 
-/* Лейбл над полем */
 .input-group label {
     font-size: 0.85em;
     text-transform: uppercase;
@@ -315,7 +307,7 @@ input {
     margin-bottom: 6px;
     font-weight: 700;
 }
-/* ---------- Мобильная адаптация ---------- */
+
 body { padding-bottom: env(safe-area-inset-bottom, 0); }
 .nav-tabs { padding-top: env(safe-area-inset-top, 0); }
 .tab-button, .history-item, .search-clear-btn { touch-action: manipulation; }
@@ -354,7 +346,6 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
     font-weight: bold;
 }
 
-
 /* ---------- HPB Label (интерактивная этикетка) ---------- */
 .lbl-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
 .lbl-legend-item {
@@ -369,12 +360,12 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 24px;
     text-align: center;
 }
 .lbl-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; }
 .lbl-top { font-size: 1.25em; }
-.lbl-middle { font-size: 1.1em; justify-content: space-between; }
+.lbl-middle { font-size: 1.1em; justify-content: space-between; gap: 60px; flex-wrap: nowrap; }
 .lbl-center { font-size: 1.4em; }
 .lbl-codeline { font-size: 1.5em; gap: 2px; row-gap: 10px; }
 .lbl-sep { font-weight: bold; color: #495057; padding: 0 2px; }
@@ -388,13 +379,10 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
     -webkit-tap-highlight-color: transparent; touch-action: manipulation;
 }
 
-/* Data - синий */
 .lbl-data { background: #e7f1ff; border-color: #9ec5fe; color: #0a58ca; }
 .lbl-chip.lbl-data.active { background: #007bff; border-color: #0056b3; color: #fff; }
-/* Code - зелёный */
 .lbl-code { background: #e9f7ee; border-color: #a3d9b1; color: #1e7e34; }
 .lbl-chip.lbl-code.active { background: #28a745; border-color: #1e7e34; color: #fff; }
-/* Number - оранжевый */
 .lbl-num { background: #fff3e0; border-color: #ffcc80; color: #c2570c; }
 .lbl-chip.lbl-num.active { background: #fd7e14; border-color: #c2570c; color: #fff; }
 
@@ -402,7 +390,6 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
     .lbl-chip:hover { transform: scale(1.05); }
 }
 
-/* Панель пояснения - в стиле result-box остального приложения */
 .lbl-info {
     margin-top: 15px;
     padding: 12px;
@@ -418,9 +405,9 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 .lbl-info-text { color: #333; font-size: 1.05em; white-space: pre-line; word-wrap: break-word; }
 
 @media (max-width: 480px) {
-    .lbl-sheet { padding: 12px; }
+    .lbl-sheet { padding: 16px 12px; gap: 24px; }
     .lbl-top { font-size: 1.1em; }
-    .lbl-middle { font-size: 1em; justify-content: center; }
+    .lbl-middle { font-size: 1em; justify-content: center; gap: 54px; }
     .lbl-center { font-size: 1.2em; }
     .lbl-codeline { font-size: 1.1em; }
     .lbl-chip { padding: 6px 8px; }
@@ -429,10 +416,6 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 .lbl-info-extra:not(:empty) { margin-top: 12px; padding-top: 12px; border-top: 2px solid #e9ecef; }
 .lbl-extra-title { font-size: 0.85em; font-weight: bold; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
 
-/* Won / SO - побольше расстояние между кнопками */
-.lbl-middle { gap: 20px; }
-
-/* ---------- Reference table: компактнее, меньше пустого места ---------- */
 #dataTable { min-width: 0; width: auto; }
 #dataTable th, #dataTable td { padding: 8px 6px; }
 #dataTable th:not(:first-child), #dataTable td:not(:first-child) { min-width: 56px; text-align: center; }
@@ -445,14 +428,6 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 }
 #dataTable th:first-child { background-color: #007bff; z-index: 3; }
 
-/* Won / SO - увеличенный зазор между кнопками */
-.lbl-middle { gap: 40px; flex-wrap: nowrap; }
-@media (max-width: 480px) {
-    .lbl-middle { gap: 32px; }
-    .lbl-middle .lbl-chip { padding: 6px 6px; font-size: 0.9em; }
-}
-
-/* ---------- Чертежи LID / BASE ---------- */
 .tp-drawing {
     margin-top: 6px;
     padding: 8px 10px;
@@ -464,7 +439,6 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 }
 .tp-drawing svg { display: block; width: 100%; max-width: 240px; height: auto; margin: 0 auto; }
 
-/* ---------- TP Config внутри Label ---------- */
 #lblTpPanel { scroll-margin-top: 70px; }
 #lblTpPanel.flash { animation: tpFlash 1.2s ease; }
 @keyframes tpFlash { 0%, 60% { border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.25); } 100% { border-color: #e9ecef; box-shadow: none; } }
@@ -472,17 +446,6 @@ input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px s
 #tpResultBox .result-item > strong { color: #007bff; }
 #tpResultBox .result-item > span:first-child { color: #495057; }
 
-/* Больше интервалов на этикетке (особенно на iPhone) */
-.lbl-sheet { gap: 24px; }
-.lbl-middle { gap: 60px; }
-@media (max-width: 480px) {
-    .lbl-sheet { gap: 24px; padding: 16px 12px; }
-    .lbl-middle { gap: 54px; }
-    .lbl-codeline { row-gap: 14px; }
-}
-
-/* Область за краями страницы (оттяжка вниз / обновление на iPhone):
-   сверху синий цвет шапки, снизу цвет фона страницы */
 html {
     background-color: #007bff;
     background-image: linear-gradient(to bottom, #007bff 0, #007bff 50%, #f4f4f9 50%, #f4f4f9 100%);
@@ -491,7 +454,6 @@ html {
     min-height: 100%;
 }
 
-/* ---------- Кнопка сброса и версия ---------- */
 .reset-btn {
     display: block; width: 100%; min-height: 44px;
     padding: 10px 14px;
@@ -505,9 +467,9 @@ html {
 .app-version {
     text-align: center; color: #6c757d; font-size: 0.8em;
     padding: 16px 0 calc(16px + env(safe-area-inset-bottom, 0px));
+    -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; cursor: default;
 }
 
-/* ---------- Надпись при оттягивании страницы вниз ---------- */
 .pull-hint {
     position: fixed; top: 0; left: 0; right: 0;
     z-index: -1;
@@ -523,8 +485,6 @@ html {
 }
 body.pulling { will-change: transform; }
 
-/* ---------- Пасхалка ---------- */
-.app-version { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; cursor: default; }
 .egg-overlay {
     position: fixed; inset: 0; z-index: 5000;
     background: rgba(0, 0, 0, 0.8);
