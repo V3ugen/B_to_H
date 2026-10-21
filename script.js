@@ -1,18 +1,3 @@
-const INCH_TO_MM = 25.4;
-const HOUSING_OFFSET = 261;
-const BARS_OFFSET = 51;
-const IMPB_HOUSING_OFFSET = 236;
-const IMPB_INSULATOR_OFFSET = 193;
-const IMPB_CONDUCTOR_OFFSET = 42;
-
-const KEY_DIRECT = 'hpbHousingHistory';
-const KEY_REVERSE = 'barsReverseHistory';
-const KEY_COMPLEX = 'impbComplexHistory';
-
-let directTimer = null;
-let reverseTimer = null;
-let complexTimer = null;
-
 const tableData = [
     ["DL144-200", "237.8", "822", "1406.2", "1990.4", "2574.6", "3158.8"],
     ["DL144 80-TPNBE", "237.8", "822", "1406.2", "1990.4", "2574.6", "3158.8"],
@@ -48,20 +33,9 @@ const tableData = [
     ["DL39.13-200-TPBE", "366.6", "", "", "", "", ""],
     ["DL34 115-TPNBE", "301.3", "", "", "", "", ""]
 ];
-
 document.addEventListener("DOMContentLoaded", () => {
-    renderTable();
-    bindEvents();
-    restoreLastPage();
-    renderAllHistories();
-    showAppVersion();
-    registerSW();
-    showTpConfiguration();
-});
-
-function renderTable() {
     const tbody = document.getElementById("tableBody");
-    if (!tbody) return;
+    if(!tbody) return;
     tableData.forEach(row => {
         const tr = document.createElement("tr");
         row.forEach((cell, index) => {
@@ -70,36 +44,35 @@ function renderTable() {
                 td.innerHTML = `<strong>${cell}</strong>`;
             } else {
                 td.textContent = cell === "" ? "—" : cell;
-                if (cell === "") td.style.textAlign = "center";
+                if(cell === "") td.style.textAlign = "center";
             }
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
     });
-}
+});
 
 function switchPage(pageId, buttonElement) {
     document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
     
     const targetPage = document.getElementById(pageId);
-    if (targetPage) targetPage.classList.add('active');
-    if (buttonElement) {
+    if(targetPage) targetPage.classList.add('active');
+    if(buttonElement) {
         buttonElement.classList.add('active');
         buttonElement.scrollIntoView({ inline: 'center', block: 'nearest' });
     }
     try { localStorage.setItem('lastPage', pageId); } catch(e) {}
 }
 
-function restoreLastPage() {
+document.addEventListener('DOMContentLoaded', () => {
     let last = null;
     try { last = localStorage.getItem('lastPage'); } catch(e) {}
-    if (!last) return;
-    const btn = document.querySelector(`.tab-button[data-target="${last}"]`);
+    const btn = last && document.querySelector(`.tab-button[onclick*="'${last}'"]`);
     if (btn) switchPage(last, btn);
-}
+});
 
-// ФИКС ОШИБКИ: строки обрабатываются корректно без падения движка JS
+// ФИКС ОШИБКИ: Теперь строки обрабатываются корректно без падения движка JS
 function sanitizeAndCalculate(inputElement, calculationFunction) {
     let value = inputElement.value.replace(/,/g, '.').replace(/[^0-9.]/g, '');
     const parts = value.split('.');
@@ -118,6 +91,13 @@ function sanitizeAndCalculate(inputElement, calculationFunction) {
     }
     calculationFunction();
 }
+let directTimer = null;
+let reverseTimer = null;
+let complexTimer = null;
+
+const KEY_DIRECT = 'hpbHousingHistory';
+const KEY_REVERSE = 'barsReverseHistory';
+const KEY_COMPLEX = 'impbComplexHistory';
 
 // 1. HPB HOUSING
 function calculateDirect() {
@@ -125,7 +105,7 @@ function calculateDirect() {
     const display = document.getElementById('directDisplay');
     clearTimeout(directTimer);
     if (val !== "" && val !== "-" && val !== ".") {
-        const res = ((parseFloat(val) * INCH_TO_MM) - HOUSING_OFFSET).toFixed(1);
+        const res = ((parseFloat(val) * 25.4) - 261).toFixed(1);
         display.textContent = parseFloat(res) <= 0 ? "Housing too small" : "Housing millimeters: " + res;
         directTimer = setTimeout(() => commitHistory(KEY_DIRECT, val, res, renderDirectHistory), 1500);
     } else { display.textContent = "Waiting for input..."; }
@@ -137,7 +117,7 @@ function calculateReverse() {
     const display = document.getElementById('reverseDisplay');
     clearTimeout(reverseTimer);
     if (val !== "" && val !== "-" && val !== ".") {
-        const result = (parseFloat(val) + BARS_OFFSET) / INCH_TO_MM;
+        const result = (parseFloat(val) + 51) / 25.4;
         const resStr = result.toFixed(2);
         display.textContent = "Housing is: " + resStr + " inches";
         reverseTimer = setTimeout(() => commitHistory(KEY_REVERSE, val, resStr, renderReverseHistory), 1500);
@@ -153,11 +133,11 @@ function calculateComplex() {
     clearTimeout(complexTimer);
 
     if (isV1 || isV2) {
-        const r1 = ((isV1 ? parseFloat(val1) : 0) * 12 + (isV2 ? parseFloat(val2) : 0)) * INCH_TO_MM;
+        const r1 = ((isV1 ? parseFloat(val1) : 0) * 12 + (isV2 ? parseFloat(val2) : 0)) * 25.4;
         document.getElementById('resComplex1').textContent = "In millimeters: " + r1.toFixed(1);
-        document.getElementById('resComplex3').textContent = "Housings: " + (r1 - IMPB_HOUSING_OFFSET).toFixed(1);
-        document.getElementById('resComplex2').textContent = "Insulators: " + (r1 - IMPB_INSULATOR_OFFSET).toFixed(1);
-        document.getElementById('resComplex4').textContent = "Conductors: " + (r1 - IMPB_CONDUCTOR_OFFSET).toFixed(1);
+        document.getElementById('resComplex3').textContent = "Housings: " + (r1 - 236).toFixed(1);
+        document.getElementById('resComplex2').textContent = "Insulators: " + (r1 - 193).toFixed(1);
+        document.getElementById('resComplex4').textContent = "Conductors: " + (r1 - 42).toFixed(1);
 
         const summaryInput = (val1 || '0') + ' ft / ' + (val2 || '0') + ' in';
         complexTimer = setTimeout(() => commitHistory(KEY_COMPLEX, summaryInput, r1.toFixed(1) + ' mm', renderComplexHistory), 1500);
@@ -186,12 +166,6 @@ function commitHistory(key, inputVal, resultVal, renderFunc) {
 function renderDirectHistory() { buildHistoryUI('directHistory', KEY_DIRECT, 'hpb'); }
 function renderReverseHistory() { buildHistoryUI('reverseHistory', KEY_REVERSE, 'bars'); }
 function renderComplexHistory() { buildHistoryUI('complexHistory', KEY_COMPLEX, 'impb'); }
-
-function renderAllHistories() {
-    renderDirectHistory();
-    renderReverseHistory();
-    renderComplexHistory();
-}
 
 function buildHistoryUI(boxId, storageKey, type) {
     const box = document.getElementById(boxId);
@@ -231,6 +205,12 @@ function buildHistoryUI(boxId, storageKey, type) {
         box.appendChild(b);
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderDirectHistory();
+    renderReverseHistory();
+    renderComplexHistory();
+});
 
 // SUPPORT BOLT HOLE
 function calculateSupportHoles() {
@@ -290,11 +270,11 @@ function clearInputField(inputId, calculationFunction) {
     if (inputEl) { inputEl.value = ""; calculationFunction(); }
 }
 
+// Сброс на вкладках HPB Housing и IMPB: поля, результаты и список последних размеров
 function clearHistory(key, renderFunc) {
     try { localStorage.removeItem(key); } catch(e) {}
     renderFunc();
 }
-
 function resetHpb() {
     clearInputField('directInput', calculateDirect);
     clearInputField('reverseInput', calculateReverse);
@@ -302,7 +282,6 @@ function resetHpb() {
     clearHistory(KEY_DIRECT, renderDirectHistory);
     clearHistory(KEY_REVERSE, renderReverseHistory);
 }
-
 function resetImpb() {
     clearInputField('complexInput1', calculateComplex);
     clearInputField('complexInput2', calculateComplex);
@@ -310,23 +289,49 @@ function resetImpb() {
 }
 
 // Версия приложения = версия кэша service worker (impb-calc-vNN из sw.js)
+let currentVersionText = 'Version: …';
 function showAppVersion() {
     const el = document.getElementById('appVersion');
     if (!el) return;
-    if (!('caches' in window)) { el.textContent = 'Version: unknown'; return; }
+    if (!('caches' in window)) { currentVersionText = 'Version: unknown'; el.textContent = currentVersionText; return; }
     caches.keys().then(keys => {
         const nums = keys.map(k => (k.match(/^impb-calc-v(\d+)$/) || [])[1]).filter(Boolean).map(Number);
-        el.textContent = nums.length ? 'Version: v' + Math.max(...nums) : 'Version: not cached yet';
-    }).catch(() => { el.textContent = 'Version: unknown'; });
+        currentVersionText = nums.length ? 'Version: v' + Math.max(...nums) : 'Version: not cached yet';
+        if (!el.classList.contains('version-hint')) el.textContent = currentVersionText;
+    }).catch(() => { currentVersionText = 'Version: unknown'; el.textContent = currentVersionText; });
+}
+document.addEventListener('DOMContentLoaded', () => { showAppVersion(); scheduleVersionHint(); });
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('controllerchange', () => setTimeout(showAppVersion, 500));
 }
 
-function registerSW() {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
-        navigator.serviceWorker.addEventListener('controllerchange', () => setTimeout(showAppVersion, 500));
-    }
+// Время от времени версия "размывается" и вместо неё появляется подсказка "tap me"
+function scheduleVersionHint() {
+    const el = document.getElementById('appVersion');
+    if (!el) return;
+    const delay = 7000 + Math.random() * 8000; // пауза 7-15 секунд
+    setTimeout(() => {
+        el.classList.add('version-blur');
+        setTimeout(() => {
+            el.textContent = 'tap me';
+            el.classList.remove('version-blur');
+            el.classList.add('version-hint');
+            setTimeout(() => {
+                el.classList.add('version-blur');
+                setTimeout(() => {
+                    el.textContent = currentVersionText;
+                    el.classList.remove('version-hint');
+                    el.classList.remove('version-blur');
+                    scheduleVersionHint();
+                }, 350);
+            }, 1800);
+        }, 350);
+    }, delay);
 }
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+}
 // База данных конфигураций с фотографии 
 const tpData = {
     "TP": { bars: "3 bars", lid: "56.55 MM (TP)", base: "75.95 (TP)", spacer: "23 MM", notes: "HE - HALF EARTH, BE - BARE HALF EARTH" },
@@ -337,12 +342,14 @@ const tpData = {
     "TPNHE/TPNBHE": { bars: "5 bars", lid: "52.55 MM (HE)", base: "82.95 MM (N)", spacer: "34 MM", notes: "HE - HALF EARTH, N - NEUTRAL" }
 };
 
+
 // ---------- Векторные чертежи LID и BASE (inline SVG, работают офлайн) ----------
+// Размер подписывается внутри чертежа: "49.55 MM (E)" -> "49.55 MM" + "(E)"
 function tpSizeText(value, cx, y1, y2, fs) {
     const m = String(value || '').match(/^\s*([\d.]+)\s*(?:MM)?\s*\((.+)\)\s*$/i);
     const l1 = m ? m[1] + ' MM' : String(value || '');
     const l2 = m ? '(' + m[2] + ')' : '';
-    const st = 'font-family="Arial, sans-serif" font-weight="700" text-anchor="middle" fill="currentColor"';
+    const st = 'font-family="Arial, sans-serif" font-weight="700" text-anchor="middle" fill="#dc3545"';
     return `<text x="${cx}" y="${y1}" font-size="${fs}" ${st}>${l1}</text>` +
            (l2 ? `<text x="${cx}" y="${y2}" font-size="${fs}" ${st}>${l2}</text>` : '');
 }
@@ -350,15 +357,30 @@ const TP_PATH = {
     lid: 'M 52,58 L 397,52 L 399,78 L 362,88 L 362,386 L 389,391 L 389,414 L 1111,414 L 1111,391 L 1138,386 L 1138,88 L 1101,78 L 1103,52 L 1448,58 L 1448,82 L 1426,82 L 1426,70 L 1242,70 Q 1221,70 1221,98 L 1221,190 Q 1221,202 1212,208 Q 1203,202 1203,190 L 1203,92 L 1156,92 L 1156,396 L 1184,396 L 1184,438 L 316,438 L 316,396 L 344,396 L 344,92 L 297,92 L 297,190 Q 297,202 288,208 Q 279,202 279,190 L 279,98 Q 279,70 258,70 L 74,70 L 74,82 L 52,82 Z',
     base: 'M300 100 L285 112 L300 125 V860 Q300 880 280 880 H90 V900 H390 V885 H345 Q325 885 325 865 V590 Q325 575 345 575 H1155 Q1175 575 1175 590 V865 Q1175 885 1155 885 H1110 V900 H1410 V880 H1220 Q1200 880 1200 860 V125 L1215 112 L1200 100 L1180 112 V555 H320 V112 Z'
 };
+// Красная двойная стрелка-указатель внутри чертежа (без <marker>, чтобы не ловить баг Safari с дублями id)
+function tpArrow(x, y1, y2) {
+    const head = 26, gap = 14;
+    return '<g>' +
+        `<line x1="${x}" y1="${y1 + gap}" x2="${x}" y2="${y2 - gap}" stroke="#dc3545" stroke-width="9" stroke-linecap="round"/>` +
+        `<polygon points="${x - head},${y1 + head + gap} ${x + head},${y1 + head + gap} ${x},${y1}" fill="#dc3545"/>` +
+        `<polygon points="${x - head},${y2 - head - gap} ${x + head},${y2 - head - gap} ${x},${y2}" fill="#dc3545"/>` +
+        '</g>';
+}
 function tpDrawing(kind, value) {
     if (kind === 'lid') {
         return '<div class="tp-drawing tp-drawing-lid"><svg viewBox="0 -185 1500 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LID">' +
             '<path d="' + TP_PATH.lid + '" fill="#fff" fill-rule="evenodd" stroke="currentColor" stroke-width="1.3" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>' +
-            tpSizeText(value, 750, 195, 325, 120) + '</svg></div>';
+            tpArrow(1075, 135, 370) +
+            tpSizeText(value, 750, 180, 275, 100) + '</svg></div>';
     }
     return '<div class="tp-drawing"><svg viewBox="0 70 1500 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BASE">' +
         '<path d="' + TP_PATH.base + '" fill="#fff" stroke="currentColor" stroke-width="1.3" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>' +
-        tpSizeText(value, 750, 290, 430, 120) + '</svg></div>';
+        tpArrow(1120, 140, 550) +
+        tpSizeText(value, 750, 275, 385, 100) + '</svg></div>';
+}
+// Красный прямоугольник с надписью "SPACER SIZE: ...", ставится между чертежами LID и BASE
+function tpSpacerBadge(spacer) {
+    return '<div class="tp-spacer-badge">SPACER SIZE: ' + (spacer || '') + '</div>';
 }
 
 // Функция отображения выбранной конфигурации
@@ -380,13 +402,15 @@ function showTpConfiguration() {
     display.innerHTML = `
         <div class="result-item"><span style="color: #495057;">Bars:</span> ${data.bars}</div>
         <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${data.lid}</strong>${tpDrawing('lid', data.lid)}</div>
+        ${tpSpacerBadge(data.spacer)}
         <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${data.base}</strong>${tpDrawing('base', data.base)}</div>
-        <div class="result-item"><span class="spacer-size"><span>SPACER SIZE:</span> <strong>${data.spacer}</strong></span></div>
         <div class="result-item" style="font-size: 0.85em; font-weight: normal; color: #6c757d; margin-top: 10px;">Note: ${data.notes}</div>
     `;
 }
 
+
 // HPB Label: показать пояснение к выбранной части этикетки.
+// Если передан tpKey, спецификация подтягивается из tpData (вкладка TP Config).
 function showLabelInfo(el, title, message, tpKey) {
     document.querySelectorAll('#labelPage .lbl-chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
@@ -402,13 +426,14 @@ function showLabelInfo(el, title, message, tpKey) {
             <div class="lbl-extra-title">TP Config: ${tpKey}</div>
             <div class="result-item"><span style="color: #495057;">Bars:</span> <strong>${d.bars}</strong></div>
             <div class="result-item"><span style="color: #495057;">LID:</span> <strong>${d.lid}</strong>${tpDrawing('lid', d.lid)}</div>
+            ${tpSpacerBadge(d.spacer)}
             <div class="result-item"><span style="color: #495057;">BASE:</span> <strong>${d.base}</strong>${tpDrawing('base', d.base)}</div>
-            <div class="result-item"><span class="spacer-size"><span>SPACER SIZE:</span> <strong>${d.spacer}</strong></span></div>
             <div class="result-item" style="font-size: 0.85em; color: #6c757d;">Note: ${d.notes}</div>
         `;
     }
     document.getElementById('lblInfo').style.display = 'block';
 }
+
 
 // Label: перейти к блоку TP Config ниже на странице
 function showTpPanel(el) {
@@ -424,7 +449,12 @@ function showTpPanel(el) {
     panel.classList.add('flash');
 }
 
+// Показать данные сразу при загрузке (по умолчанию TPN)
+document.addEventListener('DOMContentLoaded', showTpConfiguration);
+
+
 // ---------- Оттягивание страницы вниз: показывает надпись ----------
+// Своя реализация (нативная "резинка" в iOS не даёт ничего нарисовать под страницей)
 (function () {
     const hint = document.createElement('div');
     hint.className = 'pull-hint';
@@ -485,8 +515,8 @@ function showTpPanel(el) {
 // ---------- Пасхалка: несколько нажатий подряд на версию -> случайная гифка ----------
 (function () {
     const IMAGES = [1, 2, 3, 4, 5, 6, 7].map(n => 'images/egg-' + n + '.webp');
-    const TAPS_NEEDED = 5;
-    const MAX_GAP_MS = 1500;
+    const TAPS_NEEDED = 5;      // сколько нажатий подряд
+    const MAX_GAP_MS = 1500;    // максимальная пауза между нажатиями
 
     const ver = document.getElementById('appVersion');
     const overlay = document.getElementById('eggOverlay');
@@ -507,7 +537,6 @@ function showTpPanel(el) {
         last = bag.pop();
         return IMAGES[last];
     }
-
     function open() {
         img.removeAttribute('src');
         img.src = nextImage();
@@ -517,7 +546,6 @@ function showTpPanel(el) {
         overlay.hidden = true;
         img.removeAttribute('src');
     }
-
     ver.addEventListener('click', () => {
         taps++;
         clearTimeout(timer);
@@ -526,81 +554,3 @@ function showTpPanel(el) {
     });
     overlay.addEventListener('click', close);
 })();
-
-function bindEvents() {
-    // Вкладки
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            switchPage(btn.dataset.target, btn);
-        });
-    });
-
-    // Чипы этикетки
-    document.querySelectorAll('[data-chip]').forEach(chip => {
-        chip.addEventListener('click', () => {
-            showLabelInfo(
-                chip,
-                chip.dataset.title || '',
-                chip.dataset.message || '',
-                chip.dataset.tpkey || undefined
-            );
-        });
-    });
-
-    // TP Config: выбор конфигурации
-    const tpSelect = document.getElementById('tpConfigSelect');
-    if (tpSelect) {
-        tpSelect.addEventListener('change', showTpConfiguration);
-    }
-
-    // TP chip внутри этикетки -> открыть панель TP Config
-    const tpChip = document.getElementById('lblTpChip');
-    if (tpChip) {
-        tpChip.addEventListener('click', () => showTpPanel(tpChip));
-    }
-
-    // Калькуляторы с авто-пересчётом по вводу
-    const inputs = [
-        { id: 'directInput', fn: calculateDirect },
-        { id: 'reverseInput', fn: calculateReverse },
-        { id: 'boltLengthInput', fn: calculateSupportHoles },
-        { id: 'complexInput1', fn: calculateComplex },
-        { id: 'complexInput2', fn: calculateComplex }
-    ];
-    inputs.forEach(({ id, fn }) => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', () => sanitizeAndCalculate(el, fn));
-    });
-
-    // Кнопки очистки полей
-    document.querySelectorAll('[data-clear]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const inputId = btn.dataset.clear;
-            let fn;
-            if (inputId === 'directInput') fn = calculateDirect;
-            else if (inputId === 'reverseInput') fn = calculateReverse;
-            else if (inputId === 'boltLengthInput') fn = calculateSupportHoles;
-            else if (inputId === 'complexInput1' || inputId === 'complexInput2') fn = calculateComplex;
-            clearInputField(inputId, fn);
-        });
-    });
-
-    // Кнопки сброса
-    document.querySelectorAll('[data-action="reset-hpb"]').forEach(btn => {
-        btn.addEventListener('click', resetHpb);
-    });
-    document.querySelectorAll('[data-action="reset-impb"]').forEach(btn => {
-        btn.addEventListener('click', resetImpb);
-    });
-
-    // Поиск по таблице
-    const tableSearch = document.getElementById('tableSearch');
-    if (tableSearch) {
-        tableSearch.addEventListener('input', () => sanitizeSearchAndFilter(tableSearch));
-    }
-
-    const clearTableBtn = document.querySelector('[data-action="clear-table-search"]');
-    if (clearTableBtn) {
-        clearTableBtn.addEventListener('click', clearTableSearch);
-    }
-}

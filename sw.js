@@ -1,12 +1,15 @@
-const CACHE_NAME = 'impb-calc-v77';
-const ASSETS = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json', 'icon.png',
-  'images/egg-1.webp', 'images/egg-2.webp', 'images/egg-3.webp', 'images/egg-4.webp', 'images/egg-5.webp', 'images/egg-6.webp', 'images/egg-7.webp'];
+const CACHE_NAME = 'impb-calc-v90';
+const ASSETS = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json', 'icon.png'];
+// Картинки пасхалки: необязательные, их отсутствие не ломает установку обновления
+const OPTIONAL_ASSETS = [1, 2, 3, 4, 5, 6, 7].map((n) => 'images/egg-' + n + '.webp');
 
 self.addEventListener('install', (e) => {
   // cache: 'reload' - берём файлы с сервера, а не из HTTP-кэша браузера
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) =>
-      cache.addAll(ASSETS.map((a) => new Request(a, { cache: 'reload' })))
+      cache.addAll(ASSETS.map((a) => new Request(a, { cache: 'reload' }))).then(() =>
+        Promise.allSettled(OPTIONAL_ASSETS.map((a) => cache.add(new Request(a, { cache: 'reload' }))))
+      )
     )
   );
   self.skipWaiting();
