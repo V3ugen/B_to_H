@@ -520,6 +520,7 @@ html {
     font-family: Arial, sans-serif; font-size: 15px; font-weight: bold; letter-spacing: 0.5px;
     opacity: 0;
     pointer-events: none;
+    display: none;
 }
 body.pulling { will-change: transform; }
 

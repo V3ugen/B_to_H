@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
             hint.style.transition = 'opacity 0.3s ease';
             body.style.transform = '';
             hint.style.opacity = '0';
-            setTimeout(() => { body.style.transition = ''; hint.style.transition = ''; }, 320);
+            setTimeout(() => { body.style.transition = ''; hint.style.transition = ''; hint.style.display = 'none'; }, 320);
         }
         pulling = false;
     }
@@ -497,7 +497,7 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
         const dy = e.touches[0].clientY - startY;
         if (!pulling && (dy < 8 || Math.abs(dy) < Math.abs(dx) || window.scrollY > 0)) return;
         if (dy <= 0) { release(); return; }
-        if (!pulling) pickPhrase();
+        if (!pulling) { pickPhrase(); hint.style.display = 'block'; }
         pulling = true;
         if (e.cancelable) e.preventDefault();
         const max = hint.offsetHeight || 100;
@@ -553,4 +553,51 @@ document.addEventListener('DOMContentLoaded', showTpConfiguration);
         if (taps >= TAPS_NEEDED) { taps = 0; clearTimeout(timer); open(); }
     });
     overlay.addEventListener('click', close);
+})();
+
+
+// ---------- iOS: не давать странице прыгать вниз при открытии клавиатуры ----------
+(function () {
+    document.addEventListener('focusin', (e) => {
+        const el = e.target;
+        if (!el || el.tagName !== 'INPUT') return;
+        const y = window.scrollY;
+        const check = () => {
+            const vv = window.visualViewport;
+            const r = el.getBoundingClientRect();
+            const bottom = vv ? vv.height : window.innerHeight;
+            // если поле и так видно над клавиатурой, возвращаем прежнюю прокрутку
+            if (r.top >= 60 && r.bottom <= bottom - 8) window.scrollTo(0, y);
+        };
+        [50, 150, 350, 600].forEach(t => setTimeout(check, t));
+    });
+})();
+
+// ---------- iOS: страница не должна прыгать при вводе цифр ----------
+// Результат и блок истории меняют высоту страницы во время набора; Safari в ответ
+// пролистывает её. Запоминаем позицию до ввода и возвращаем после пересчёта.
+(function () {
+    let savedY = 0;
+    let busy = false;
+    document.addEventListener('beforeinput', (e) => {
+        if (e.target && e.target.tagName === 'INPUT') savedY = window.scrollY;
+    }, true);
+    document.addEventListener('input', (e) => {
+        const el = e.target;
+        if (!el || el.tagName !== 'INPUT') return;
+        const y = busy ? savedY : (savedY || window.scrollY);
+        savedY = y;
+        busy = true;
+        const restore = () => {
+            const vv = window.visualViewport;
+            const r = el.getBoundingClientRect();
+            const bottom = vv ? vv.height : window.innerHeight;
+            if (r.top >= 60 && r.bottom <= bottom - 8 && Math.abs(window.scrollY - y) > 2) {
+                window.scrollTo(0, y);
+            }
+        };
+        requestAnimationFrame(restore);
+        [60, 200, 500, 1600, 1800].forEach(t => setTimeout(restore, t));
+        setTimeout(() => { busy = false; savedY = 0; }, 1900);
+    }, true);
 })();
