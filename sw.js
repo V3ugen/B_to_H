@@ -1,4 +1,4 @@
-const CACHE_NAME = 'impb-calc-v90';
+const CACHE_NAME = 'impb-calc-v91';
 const ASSETS = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json', 'icon.png'];
 // Картинки пасхалки: необязательные, их отсутствие не ломает установку обновления
 const OPTIONAL_ASSETS = [1, 2, 3, 4, 5, 6, 7].map((n) => 'images/egg-' + n + '.webp');
